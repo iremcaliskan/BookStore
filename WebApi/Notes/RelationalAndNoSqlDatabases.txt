@@ -1,0 +1,258 @@
+Ýliþkisel ve NoSql Veritabanlarý
+
+RDMS (Relational Database Management System) - Ýliþkisel Veritabaný Yönetim Sistemleri
+Ýliþkisel Veritabanlarý veriyi birbiri ile iliþkili bir þekilde tutmaya yarar.
+Tablolar aracýlýðýyla veriler hem kendi içlerinde hem tablolar arasýnda iliþkili bir þekilde saklanýr.
+Tablolar satýrlar ve sütunlardan oluþur.
+Bu satýr ve sütunlar verileri daha anlamlý tutmamýzý ve okumamýzý saðlar.
+
+Ýliþkisel veritabaný yönetim sistemleri ise, veritabaný oluþturma, verileri yönetme ve saklama gibi iþlemleri kolayca yapmanýza olanak saðlayan yazýlýmlardýr.
+Çoðu veritabanýna eriþim için SQL(Structured Query Language) kullanýlýr.
+Veriler tablolarda birbiri ile iliþkili þekilde saklanýrken tablolar arasýnda da iliþkiler oluþturulur.
+Bu tablolar arasý iliþki bize Data Consistency yani Veri Tutarlýlýðýný saðlar. Dolayýsýyla bu iliþkilerin doðru kurulmasý oldukça kritiktir.
+
+Bazý popüler veritabanlarý:
+MySql (Ücretsiz)
+PostgreSQL (Ücretsiz)
+MsSql
+IBM DB2
+Oracle
+
+Bu veritabanlarýnda kullanýlan diller de kendi aralarýndan deðiþiklik gösterebiliyor.
+Örneðin MsSQL ile TSQL dilini kullanýrken, Oracle ile PLSQL dilini kullanýrýz.
+Birbirinden çok büyük farklar olmasa da kendilerine özel dil yapý farklarý vardýr.
+
+
+NoSql - Ýliþkisel Olmayan Veritabaný Yönetim Sistemleri
+Ýliþkisel veritabaný yönetim sistemlerinin doðuþu bundan 40 sene öncesine dayanýr.
+Yýllar içerisinde olgunluk seviyesi çok artmýþtýr. Ama günümüzde bile hala büyük verileri saklama ve iþleme konusunda yetersiz kalmaktadýr.
+Tam da bu noktada yaþanan sýkýntýlara karþýlýk NoSql veritabanlarý 1998 yýlýnda ortaya çýkmýþtýr.
+
+NoSql Veritabanlarý yüksek trafik ile yüksek miktarda verinin yönetimine odaklandý.
+Immediate Data Consistency yani Anlýk Veri Tutarlýlýðýndan feragat ederek, yüksek performansa ve hýza odaklandý.
+
+Ýliþkisel veritabanlarýndaki Immediate Data Consistency burda yerini Eventual Data Consistency yani Nihai Veri Tutarlýlýðýna býrakýr.
+
+NoSQl veritabanlarýnda CAP Teorimi denen önemli bir teorem vardýr.
+Consistency : Tüm istemciler(clients) güncelleme yada silme iþleminden sonra verilerin ayný görünümünü görür. (Tutarlýlýk)
+CA
+Availability : Kýsmi nodlar(düðüm) arýzalarýnda tüm istemciler verilerin bir kopyasýný bulabilir. (Kullanýlabilirlik)
+AP
+Partitioning : Kýsmi að hatasý varlýðýnda sistem beklenilen gibi çalýþýr. (Bölümleme)
+CP
+
+NoSql veritabaný Strong Consistency, Availability ve Partitioning kavramlarýný ayný anda garanti edemez.
+
+Bazý Popüler NoSql Veritabanlarý ve Özellikleri:
+Document Based (MongoDB - CouchDB)
+Key/Value(Redis)
+Graph Based (Neo4J)
+Column Based (Cassandra, HBase)
+
+
+RDMS	                                                         NoSql
+Dikeyde ölçeklenebilir, yatayda ölçeklenmesi çok zordur.	     Kolay bir þekilde yatayda ya da dikey de ölçeklenebilir. Daðýtýk sistemler için uygundur.
+Anlýk veri tutarlýlýðý sunar.                                  	 Nihai(Son) veri tutarlýlýðý sunar.
+Olgunluk seviyesi yüksektir. Yetiþmiþ uzman bulmak kolaydýr.	 RDMS kadar olgun deðildir. Yetiþmiþ uzman bulmakta zordur.
+Lisans ücretleri çok yüksektir.	                                 Lisans ücretleri düþüktür.
+
+Table, Primary Key, Foreign Key Kavramlarý
+
+Primary Key (Birincil Anahtar)
+Adýndan da anlaþýlacaðý üzere anahtar veridir.
+Tabloda her satýr veriden sorumlu bir tane anahtar veri vardýr.
+Bu her satýr için ayný veridir.
+Dolayýsýyla Primart Key bilgisi kolona verilir.
+Primary key olarak iþaretlenen veri tekil olmak zorundadýr.
+Bir tabloda sadece bir kez bulunabilir.
+Aksi durumda veritabaný hata fýrlatýr.
+Primary key tek bir kolon olabileceði gibi birden fazla kolonun birleþimi de olabilir.
+Örneðin bir personel tablosu için Sicil Numarasý bir primary keydir.
+**Kýsaca **PK** olarak görebilirsiniz.
+
+Foreign Key (Ýkincil Anahtar)
+Foreign Key tablo tasarlarken Primary Key kadar önemlidir.
+Ýliþkisel veritabanlarýnda Data Consistency Foreign Key'ler yardýmýyla yapýlýr.
+Hem veri tekrarýnýný hem de tablolarda boþ durumda olan kirli(gürültü) verilerin oluþmasýný engellemek için kullanýlýr.
+Örneðin Product tablonuz ve ProductDetail tablonuz olsun.
+ProductDetail tablonuzda iliþkisi olan bir Product'ý Product tablosundan silmeye çalýþýn.
+Eðer iliþkiler doðru kurulduysa, veritabaný buna izin vermez.
+Ama arada Foreign Key iliþkisi kurulmamýþsa, siz o Product'ý silebilirsiniz.
+ProductDetail tablosundaysa Product tablosunda karþýlýðýný olmayan bir kayýt kalýr.
+Bu istenmeyen bir durumdur.
+**Kýsaca **FK** olarak görebilirsiniz.
+
+Index Yapýsý
+Index, veritabaný tablolarý üzerinde tanýmlanan ve veriye daha az iþlemle daha hýzlý ulaþan veritabaný nesneleridir.
+Indexler hakkýnda klasik bir örnek olarak telefon rehberi verilebilir.
+Telefon rehberindeki kayýtlarýn sýralý olmamasý durumunda, yani her kaydýn telefon defterinde rastgele tutulmasý durumunda, arayacaðýmýz bir isim için tüm rehberi gezmemiz gerekecek.
+Ama rehberinizdeki kayýtlar sýralý olsaydý, aradýðýmýz ismin rehberin ortasýndaki isimden ileride mi yoksa geride mi olduðuna bakabilirdik.
+Bu þekilde aradýðýmýz verileri eleyerek bir kaç adýmda istediðimiz sonuca ulaþabilirdik. Bu örnekteki gibi verinin sýralý tutulmasýný saðlayan nesnelere index denir.
+
+Index Prensibi
+Yeni bir veritabaný oluþturduðumuzda veritabanýmýzýn bulunduðu dosyalarý belirtiriz.
+Sql Server bu dosyalarý fiziksel olarak deðil mantýksal olarak 8 KB’lýk bloklara böler.
+Bu bloklara page denir. Bundan dolayý dosyanýn ilk 8 KB’ý page0, bir sonraki 8 KB’ý page1 olur ve bu þekilde devam eder.
+Page’lerin içinde ise tablolardaki satýrlara benzeyen ve adýna row denilen yapýlar bulunur.
+Sql Server page’ler üzerinde baþka bir mantýksal gruplama daha yapar; art arda 8 tane page’in bir araya gelmesiyle oluþan 64 KB büyüklüðündeki veri yapýsýna Extent denir.
+Bir extent dolduðunda; bir sonraki kayýt, kayýt boyutu büyüklüðünde yeni bir Extent’e yazýlýr.
+Her page içinde bulunan satýr sayýsý ayný deðildir.
+Page’ler, veri büyüklüðüne göre deðiþen satýrlara sahiptir ve bir satýr sadece bir page içinde olabilir.
+Sql Server aslýnda satýrlarý okumaz bunun yerine page’leri okuyarak verilere ulaþýr.
+Sql Server’da bir tabloya index tanýmlandýðý zaman o tablodaki verileri bir tree yapýsýna göre organize eder.
+Bu tree yapýsýnýn en üst node’u Root level diye adlandýrýlýr.
+Buradan baþlayarak saða veya sola dallanarak kaydý bulmaya çalýþýr.
+Root level’in bir altýnda ise Intermediate level’ler vardýr.
+Bir tane Root level olmasý gerekirken, Intermediate level’ler ise tablodaki veri sayýsýna göre birden fazla olabilir.
+En alt kýsýmda ise Leaf Node’lar yani veriyi asýl tutan yapýlar vardýr.
+Aramaya en üstten baþlanýp en alt level’a kadar gelinir. Index tipine göre leaf node’larda tutulan veri deðiþiklik gösterecektir.
+                             ?96
+                              |
+                          : 1-200         --------------------------- Root
+                        /:         \
+                 1-100   :           101-200         ---------------- Intermediate
+              /        \ :          /         \
+         1-50         51-100      101-150       151-200      --------Intermediate
+        /    \        /    :\     /      \       /      \
+    1-25   26-50  51-75  76-100 101-125 26-150 151-175  176-200   --- Leaf
+Yukarýdaki görüldüðü gibi aradýðýmýz veriyi üç adýmda bulabiliriz.
+Ama index kullanýlmasaydý, yani veriler yukarýdaki gibi tree yapýsýnda organize edilmeseydi tüm kayýtlar gezilerek veriye ulaþabilirdi.
+Veriye ulaþmak için her zaman leaf level’a kadar inmek gerekir.
+
+Heap Table
+Sql Server’da Heap table adýnda bir kavram yok.
+Bir tabloya Heap denilmesi aslýnda onun üzerinde bir Index tanýmlý olup olmamasýna baðlýdýr.
+Sql Server bir veriyi Indexsiz bir tabloya eklerken sýralý olarak diskte tutmaz ve veriler rastgele data page’lere yazýlýr.
+Bu þekilde olan tablolar Heap diye adlandýrýlýr.
+Yani üzerinde Clustered Index olmayan tablolar Heap table’dýr diyebiliriz.
+Heap table üzerinde bir veri arandýðýnda Sql Server tablonun kayýtlarýna sýrayla eriþir ve aradýðýmýz kayýtla eþleþtirir.
+Kayýt bulunsa bile eþleþebilecek baþka kayýt var mý diye tüm kayýtlarda karþýlaþtýrma iþlemi yapar.
+Sql Server’ýn yaptýðý bu iþleme Table Scan denir.
+Bu iþlem tablodaki kayýt sayýsýna göre çok uzun zaman alacaktýr.
+Clustered Index tanýmlý olan tablolara göre avantajlarý da vardýr.
+Bu tablolarda ekstra Index bakým maliyeti ve Clustered Index tree yapýsý için ekstra alana ihtiyaç yoktur.
+
+Clustered Table
+Üzerinde Clustered Index tanýmlý tablolara denir.
+Sorgu index tanýmlanmýþ kolonlarý kullanýrsa, veriye çok hýzlý eriþim saðlanýr.
+Data page’ler veriye hýzlý eriþim için birbirine baðlýdýr.
+Heap table’lara göre INSERT, UPDATE ve DELETE iþlemlerinde ekstra index bakým maliyeti vardýr.
+
+Index Çeþitleri
+Sql Server’da indexler temelde Clustered ve Non-Clustered index olmak üzere ikiye ayrýlýr.
+Leaf node’larda tutulan verinin kendisi ise Clustered, verinin hangi pagede tutulduðunu gösteren pointer ise Non-Clustered index diye adlandýrýlýr.
+
+Clustered Index
+Clustered index’ler tablodaki veriyi fiziksel olarak sýralar.
+Bir tablo fiziksel olarak sýralandýðýndan tablo üzerinde sadece bir tane Clustered index tanýmlanabilir.
+Clustered index için seçilecek kolon veya kolonlar sorgulardaki en fazla kullanýlan kolonlar olmalýdýr.
+Veriler, bu kolonlara göre fiziksel olarak sýralanacaðýndan çok hýzlý eriþilir.
+Ayrýca seçilen kolonun çok deðiþtirilmeyen bir alan olmasý gerekir.
+Çünkü index’e ait kolonun deðiþmesi demek tüm index’in yeniden organize olmasý yani fiziksel olarak yeniden sýralanmasý anlamýna gelir.
+Sql server index ihtiyacýný aslýnda kendisi belirler. Bizim tanýmlayacaðýmýz index’leri kullanýp kullanmamaya kendisi karar verir.
+-- CREATE CLUSTERED INDEX IX_IndexName ON TableName (Column1);
+
+Non-Clustered Index
+Non-Clustered Index veriyi fiziksel deðil mantýksal olarak sýralar.
+Bu index’lerin leaf node’larýnda verinin kendisi deðil nerede olduðu bilgisi tutulur.
+Tablo üzerinde en fazla 999 tane non-clustered index tanýmlanabilir.
+Non-clustered index’ler veriye doðrudan eriþemez.
+Heap üzerinden ya da bir clustered index üzerinden eriþebilir.
+Bu index’i oluþtururken sorgumuzun koþul kýsmýnda sýk kullandýðýmýz kolonlardan oluþturulmasý gerekir.
+--CREATE NONCLUSTERED INDEX IX_IndexName ON TableName (Column1);
+
+Bir tabloda en fazla 1 tane clustered index, 999 tane de non-clustered olabilir.
+Sql Server’da bir index en fazla 16 kolon içerebilir ve toplam boyutu 900 byte’ý aþmamasý gerekir.
+Ayrýca büyük boyutlu alanlar yani varchar(max), nvarchar(max), xml, text ve image türüne sahip kolonlar üzerinde herhangi bir index tanýmlamasý yapýlamaz.
+Hep index’in avantajlarýndan bahsettik ama maliyetleri de çok fazladýr.
+Her index oluþturduðunuzda veritabanýnýzdan bir alan iþgal edilir.
+Index’lerin insert, update ve delete iþlemlerinde tekrardan organize olmasý gerekir ve bu durum tablo performansýný olumsuz etkiler.
+Bir tabloda index oluþturulmaya baþlandýðýnda Sql Server tabloyu kitler ve eriþimi engeller.
+Index oluþturma iþlemi tablodaki veri sayýsýna göre kýsa veya uzun sürebilir.
+Dolayýsýyla index seçiminde çok düþünüp dikkatli karar verilmelidir.
+
+Unique Index
+Verinin tekilliðini saðlamak için kullanýlýr.
+Veri tekrarýný engeller ve tanýmladýðýmýz kolona göre veri çekmeyi hýzlandýrýr.
+Tablomuza bir primary key veya unique constraint tanýmladýðýmýz zaman otomatik unique index tanýmlanýr.
+Bu index’i birden fazla kolona tanýmladýðýmýz zaman tekillik tek kolon üzerinden deðil de tanýmlandýðý kolonlar üzerinden oluþuyor.
+Tanýmlandýðý kolona sadece bir kere null deðeri eklenebilir.
+Hem clustered hem de non-clustered index’ler unique olarak tanýmlanabilir.
+--CREATE UNIQUE INDEX AK_IndexName ON TableName (Column1);
+
+Index Tasarýmý
+Yoðun þekilde veri güncelleme iþlemi olan tablolarda, index tanýmýnda mümkün olduðunca az kolon seçmeliyiz.
+Veri güncellemenin az olduðu tablolarda daha çok index tanýmlayabiliriz.
+Clustered index’i mümkün olduðunca az kolona tanýmlamalýyýz. Ýdeal tanýmlanma biçiminde clustered index’imiz unique olan kolonda tanýmlanmalý ve null deðeri içermemeli.
+Index tanýmladýðýmýz kolonda ne kadar tekrarlý veri varsa index performansýmýz düþük olacaktýr.
+Composite index’lerde kolonlarýn sýrasýna dikkat etmeliyiz.
+Computed kolonlara da gereksinimleri karþýladýkça index tanýmlanabilir. Yani compute edilen deðerin deterministik olmasý gerekir.
+Depolama ve sýralama etkileri nedeniyle index tanýmlarýnda kolonlar dikkatli seçilmelidir.
+Index tanýmýnda kolon sayýsý, yapýlacak insert, update ve delete iþlemlerinde performansý direkt olarak etkileyecektir.
+
+Tablo Ýliþkileri
+Ýliþkisel bir veritabaný ile çalýþýrken veriyi olabildiðince atomik tutmak ve çoklanmasýnýn önüne geçmemiz gerekir.
+Böylece bir veriyi güncellediðimizde iliþkili tüm bilgileri de güncellemiþ ve veri bütünlüðünü saðlamýþ oluruz.
+Bunu saðlayabilmemiz için de tablolar arasýnda doðru iliþkileri kurmamýz gereklidir.
+Datalarý konumlandýracaðýmýz tablolar, içerdikleri alanlar ve tablolar arasý iliþkilerin tasarýmý sürecine normalizasyon adý verilir.
+
+Temel olarak 3 tip tablo iliþkisi bulunmaktadýr.
+
+1-1 Ýliþki
+Bu iliþki tipinde tablolar arasýnda 1-1 bir iliþki bulunmaktadýr.
+Genel olarak Temel Bilgi - Detay Bilgi þeklinde gruplanabilecek verileri 2 farklý tabloda konumlandýrdýðýmýzý ve iliþkilendirdiðimizi düþünebilirsiniz.
+1-1 iliþkide temel olarak A tablosundaki PK, B tablosunda da PK'dýr.
+Bu durumda B tablosunun PK'si ayný zamanda A tablosundaki PK ya iþaret eden bir FK'dýr.
+
+Örnek verecek olursak; Books tablosunda bir kitap ile ilgili temel bilgilerin varolduðunu düþünelim.
+Kitaba ait daha fazla detay bilgiyi ise BookDetails tablosunda tuttuðumuzu düþünelim.
+Bu durumda kitap-kitap detayý için 1-1 iliþki mevcut denebilir.
+
+_books_______|____bookDetails___
+id(PK)       |   bookid(PK + FK)
+title        |   publisher
+publishdate  |   isbn
+pagecount    |   summary
+
+Bu iliþkiye sahip bir veriyi aslýnda her iki tablonun kolonlarýna sahip tek bir tablo içerisinde tutuluyor gibi düþünebiliriz.
+Bu nedenle bu iliþki tipine çok da sýk rastlamayabilirsiniz.
+Uygulamamýzýn duyduðu ihtiyaca göre bu þekilde bir 1-1 iliþki kurup kurmama kararý vermemiz gerekebilir.
+
+1-N Ýliþki
+Bu iliþki tipinde tablolar arasýnda 1-N bir iliþki bulunmaktadýr.
+Temel olarak A tablosundaki PK'nýn, B tablosunda bir FK karþýlýðý vardýr.
+Fakat B tablosunun kendine ait ayrý bir PK tanýmý vardýr.
+
+Örnek verecek olursak; Books tablosunda bir kitabýn temel bilgilerini tuttuðumuzu düþünelim.
+Kitaba ait her bir baskýyla ilgili bilgileri ise BookEditions tablosunda tuttuðumuzu düþünelim.
+Bu durumda kitap-kitap baskýsý için 1-N iliþiki mevcut diyebiliriz. 
+
+_books_______|____bookEditions___
+id(PK)       |   editionnumber(PK)
+title        |   bookid(FK)
+publishdate  |   publisher
+pagecount    |   editor
+             |   coverdesigner
+
+1-N iliþki en çok kullanýlan iliþki tiplerinden birisidir. Günümüzde farkýnda olmadan sýkça kullandýðýmýz 1-N iliþki türleri :
+User -> Posts
+Post -> Comments/Reactions
+User -> PaymentMethods
+User -> Addresses
+
+N-N Ýliþki
+Bu iliþki tipinde tablolar arasýnda N-N bir iliþki bulunmaktadýr.
+Bu iliþkiyi 2 tablo arasýnda kurabilmek için 3. bir tabloya ihtiyacýmýz bulunmaktadýr. 
+emel olarak A tablosundaki PK ile B tablosundaki PK'yý barýndýran C tablosu üzerinden bu iliþki kurulur.
+C tablosunda hem A hem de B tablosuna iþaret eden FK'lar vardýr.
+
+Books örneðimiz üzerinden devam edecek olursak; bir kitabýn birden fazla yazarý olabileceði gibi, ayný yazar yada yazarlarýn da birden fazla kitap yazabileceðini düþündüðümüzde
+yazar bilgisini direkt olarak Books tablosu ile iliþkilendirmemiz doðru olmayacaktýr. Bu durumda yazar bilgileri için de Authors adýnda bir tablomuz olmalý ve kitap(lar)-yazar(lar)
+bilgisi için BookAuthors gibi ayrý bir tablo oluþturmamýz gerekir. BookAuthors tablosu sayesinde kitap-yazar arasýnda N-N iliþkiyi saðlamýþ oluruz.
+
+_books_______|____bookAuthors___|____authors___
+id(PK)       |   bookid         |   id(PK)
+title        |   authorid       |   name
+publishdate  |                  |
+pagecount    |                  |
+             |                  |

@@ -1,0 +1,44 @@
+ORM (Object Relational Mapping) Nedir? ORM Araçlarý Nelerdir? Entity Framework Core'a Giriþ
+
+ORM (Object Relational Mapping)
+ORM, Ýliþkisel veritabaný tablolarý ile uygulama içerisinde kullandýðýmýz modelleri/nesneleri/kaynaklarý/sýnýflarý birbirine baðlama tekniðidir.
+Veritabaný objelerinin kod tarafýnda bir karþýlýðý vardýr.
+ORM bu iliþkiyi kurma, iþaretleme(mapleme) tekniðinin adýdýr.
+ORM'i uygulamak için kullandýðýmýz yazýlýmlara da ORM Araçlarý denir.
+ORM araçlarý iliþkisel veritabanlarý ve uygulama arasýndaki köprüdür.
+
+En çok kullanýlan ORM araçlarý:
+Entity Framework
+Entity Framework Core
+Dapper
+nHibernate
+
+ORM Araçlarýnýn Avantajlarý:
+Veritabaný teknolojisine olan baðýmlýlýðýný ortadan kaldýrýr. (Örn, MsSql'den Oracle'a hýzlý geçiþi saðlar) - Plug and Play -- PnP
+Uygulama sadece ORM'i bilir. Database hakkýnda fikri yoktur.
+SQL/TSQL/PLSQL bilmeden çok kýsa bir zamanda veritabaný iþlemlerini çok daha az kod yazarak yapýlmasýný saðlar.
+Nesne yönelimli kod yazmayý destekler.
+ORM Araçlarýnýn çoðu açýk kaynak kodludur.
+
+ORM Araçlarýnýn Dezavantajlarý:
+Performans sorunlarý yaratabilir.
+Veritabanýna baðlanýp SQL çalýþtýrmak her zaman için daha performanslýdýr. +
+Orm araçlarýnýn oluþturduðu sqllere müdahale edilemez, kontrolü geliþtiricinin elinden alýr.
+Orm aracýný öðrenmek için de zamana ihtiyacýnýz vardýr.
+
+ORM modelleme yaklaþýmlarý 3'e ayrýlýr:
+DB First Yaklaþýmý: Önceliði veritabanýdýr. Modeli hazýrda bulunan bir veritabanýndan oluþturur. Ado.Net Entity Data Model
+Code First Yaklaþýmý : Kod ile veritabaný ve entity modeli tasarlama yaklaþýmýdýr.
+Model First Yaklaþýmý : Model oluþturarak kod yazma yaklaþýmýdýr.
+
+Entity Framework Core
+Entity Framework Microsoft'un ORM aracý olarak sunduðu Data Access teknolojisidir.
+Entity Framework yýllar içerisinde olgunlaþarak EF 6.x versiyonuna ulaþtýktan sonra yerini Entity Framework Core'a býraktý.
+Entity Framework Core ise cross-platform ve open source bir teknolojidir.
+.Net Core Entity Framework Core ile uyumludur.
+.Net Framework +4.5 ile de Entity Framework kullanýabilir.
+                                                                       __Framework__   ________OS________
+EF Core - .Net Core Apps, Web, API, Console...             -- Ef Core + .Net Cor     + Windows/Mac/Linux
+        - .Net 4.5+ Apps, Console, WinForm, WPF, Asp.NET   -- EF Core + .Net 4.5+    + Windows
+        - Devices + ioT, Mobile, Pc, Xbox, Surface Hub     -- Ef Core + UWP          + Win 10
+        - Mobile Apps, Android, iOS, Windows               -- Ef Core + Xamarine     + Mobile
