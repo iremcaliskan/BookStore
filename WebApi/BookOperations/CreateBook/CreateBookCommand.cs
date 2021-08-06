@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Linq;
 using WebApi.DbOperations;
 
@@ -8,9 +9,11 @@ namespace WebApi.BookOperations.CreateBook
     {
         public CreateBookModel Model { get; set; } // Model dışarıdan gelecek
         private readonly BookStoreDbContext _context;
-        public CreateBookCommand(BookStoreDbContext context)
+        private readonly IMapper _mapper;
+        public CreateBookCommand(BookStoreDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public void Handle()
@@ -20,13 +23,16 @@ namespace WebApi.BookOperations.CreateBook
             {
                 throw new InvalidOperationException("The book is already in the system.");
             }
-            book = new Book
-            { // Gelen modelin özelliklerini kitaba eşitleyip db'ye ekleme yapılacak
-                Title = Model.Title,
-                GenreId = Model.GenreId,
-                PageCount = Model.PageCount,
-                PublishDate = Model.PublishDate
-            };
+
+            // Model üzerinden tek tek maplemeyi ortadan kaldıran Automapper'dır. Bu fazla bir kod yazımıdır.
+            //book = new Book
+            //{ // Gelen modelin özelliklerini kitaba eşitleyip db'ye ekleme yapılacak
+            //    Title = Model.Title,
+            //    GenreId = Model.GenreId,
+            //    PageCount = Model.PageCount,
+            //    PublishDate = Model.PublishDate
+            //};
+            book = _mapper.Map<Book>(Model); // Model ile gelen veriyi Book objesine dönüştür.
 
             _context.Books.Add(book);
             _context.SaveChanges();

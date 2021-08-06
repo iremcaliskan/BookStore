@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Linq;
-using WebApi.Common;
 using WebApi.DbOperations;
 
 namespace WebApi.BookOperations.GetBookDetail
@@ -8,10 +8,12 @@ namespace WebApi.BookOperations.GetBookDetail
     public class GetBookDetailQuery
     {
         private readonly BookStoreDbContext _context;
+        private readonly IMapper _mapper;
         public int BookId { get; set; }
-        public GetBookDetailQuery(BookStoreDbContext context)
+        public GetBookDetailQuery(BookStoreDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public BookDetailViewModel Handle()
@@ -22,13 +24,16 @@ namespace WebApi.BookOperations.GetBookDetail
                 throw new InvalidOperationException("Book is not found!");
             }
 
-            BookDetailViewModel vm = new BookDetailViewModel()
-            {
-                Title = book.Title,
-                Genre = ((GenreEnum)book.GenreId).ToString(),
-                PageCount = book.PageCount,
-                PublishDate = book.PublishDate.ToString("dddd/MM/yyyy")
-            };
+            //BookDetailViewModel vm = new BookDetailViewModel()
+            //{
+            //    Title = book.Title,
+            //    Genre = ((GenreEnum)book.GenreId).ToString(),
+            //    PageCount = book.PageCount,
+            //    PublishDate = book.PublishDate.ToString("dddd/MM/yyyy")
+            //};
+
+            // Gelen Book'u BookDetailViewModel olarak maple ve döndür
+            var vm = _mapper.Map<BookDetailViewModel>(book);
             return vm;
         }
     }
