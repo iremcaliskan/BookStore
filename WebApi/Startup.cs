@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using WebApi.DbOperations;
 using WebApi.Middlewares;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -36,6 +37,9 @@ namespace WebApi
             //services.AddScoped<interface,class>(); // Bir Http Request boyunca yalnýzca bir kez nesne oluþturulup ve kullanýlýr, Response oluþtuðu an ömrü biter. Her requestte yeni bir instance üretilir.
             //services.AddTransient<interface,class>(); // Container tarafýndan her seferinde yeniden oluþturulur.
             services.AddAutoMapper(Assembly.GetExecutingAssembly()); // AutoMapper çalýþan assemblylerini yani configlerini alarak sisteme tanýtýlýr
+
+            services.AddSingleton<ILoggerService, ConsoleLogger>();
+            //services.AddSingleton<ILoggerService, DBLogger>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
