@@ -27,13 +27,13 @@ Orm araçlarýnýn oluþturduðu sqllere müdahale edilemez, kontrolü geliþtiricinin e
 Orm aracýný öðrenmek için de zamana ihtiyacýnýz vardýr.
 
 ORM modelleme yaklaþýmlarý 3'e ayrýlýr:
-DB First Yaklaþýmý: Önceliði veritabanýdýr. Modeli hazýrda bulunan bir veritabanýndan oluþturur. Ado.Net Entity Data Model
+DB First Yaklaþýmý: Önceliði veritabanýdýr. Modeli hazýrda bulunan bir veritabanýndan oluþturur. (Ado.Net Entity Data Model)
 Code First Yaklaþýmý : Kod ile veritabaný ve entity modeli tasarlama yaklaþýmýdýr.
 Model First Yaklaþýmý : Model oluþturarak kod yazma yaklaþýmýdýr.
 
 Entity Framework Core
 Entity Framework Microsoft'un ORM aracý olarak sunduðu Data Access teknolojisidir.
-Entity Framework yýllar içerisinde olgunlaþarak EF 6.x versiyonuna ulaþtýktan sonra yerini Entity Framework Core'a býraktý.
+Entity Framework yýllar içerisinde olgunlaþarak EF 6.x versiyonuna ulaþtýktan sonra yerini Entity Framework Core'a býrakmýþtýr.
 Entity Framework Core ise cross-platform ve open source bir teknolojidir.
 .Net Core Entity Framework Core ile uyumludur.
 .Net Framework +4.5 ile de Entity Framework kullanýabilir.

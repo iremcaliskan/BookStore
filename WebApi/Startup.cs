@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using WebApi.DbOperations;
+using WebApi.Middlewares;
 
 namespace WebApi
 {
@@ -31,6 +32,9 @@ namespace WebApi
             // DbContext sýnýfý servis olarak uygulamaya tanýtýlýr ve belirtilen ayarlar kullanýlýr.
             services.AddDbContext<BookStoreDbContext>(options => options.UseInMemoryDatabase(databaseName: "BookStoreDB"));
             // Servis eklemeleri:
+            //services.AddSingleton<interface,class>(); // Uygulamanýn çalýþmasýndan durmasýna kadar geçen sürede yalnýzca bir nesne üretir ve hep o nesne kullanýlýr.
+            //services.AddScoped<interface,class>(); // Bir Http Request boyunca yalnýzca bir kez nesne oluþturulup ve kullanýlýr, Response oluþtuðu an ömrü biter. Her requestte yeni bir instance üretilir.
+            //services.AddTransient<interface,class>(); // Container tarafýndan her seferinde yeniden oluþturulur.
             services.AddAutoMapper(Assembly.GetExecutingAssembly()); // AutoMapper çalýþan assemblylerini yani configlerini alarak sisteme tanýtýlýr
         }
 
@@ -49,6 +53,9 @@ namespace WebApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Request Endpoint'e düþmeden önce
+            app.UseCustomExceptionMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

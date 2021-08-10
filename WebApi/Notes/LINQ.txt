@@ -2,7 +2,7 @@ LINQ (Language Integrated Query)
 LINQ .Net Framework 3.5 ve Visual Studio 2008 ile hayatýmýza giren farklý data source yani veri kaynaklarýný sorgulamamýza yarayan bir dildir.
 LINQ Visual Basic ve C# ile birlikte kullanýlabilir.
 Linq IQuerayable sýnýflar ve IQuerayable'dan türeyen sýnýflarla birlikte kullanýlabilir.
-EF Core ile yarattýðýmýz context'in elemanlarý yani tablolarýn koddaki karþýklýklarý DBSet tipindedir.
+EF Core ile yarattýðýmýz Context'in elemanlarý yani tablolarýn koddaki karþýklýklarý DBSet tipindedir.
 DBSet de IQuerayable sýnýfýndan türeyen bir sýnýftýr.
 Dolayýsýyla LINQ kullanýlarak DBSet'ler üzerinde sorgulama yapýlabilir.
 

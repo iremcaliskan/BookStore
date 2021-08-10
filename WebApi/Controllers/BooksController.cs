@@ -292,79 +292,101 @@ namespace WebApi.Controllers
         public IActionResult GetById([FromRoute] int id)
         {
             BookDetailViewModel result;
-            try
-            {
+            //try
+            //{
                 GetBookDetailQuery query = new GetBookDetailQuery(_context, _mapper);
                 query.BookId = id;
                 GetBookDetailQueryValidator validator = new GetBookDetailQueryValidator();
                 validator.ValidateAndThrow(query);
                 result = query.Handle();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(ex.Message);
+            //}
             return Ok(result);
         }
 
         [HttpPost]
         public IActionResult AddBook([FromBody] CreateBookModel newBook)
         {
+            //try
+            //{  
             CreateBookCommand command = new CreateBookCommand(_context, _mapper);
-            try
-            {
-                command.Model = newBook;
-                CreateBookCommandValidator validator = new CreateBookCommandValidator();
-                validator.ValidateAndThrow(command);
-                command.Handle();
-                //if (!result.IsValid)
-                //    foreach (var error in result.Errors)
-                //        Console.WriteLine("Property " + error.PropertyName + " - Error Message: " + error.ErrorMessage);
-                //else
-                //    command.Handle();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            command.Model = newBook;
+            CreateBookCommandValidator validator = new CreateBookCommandValidator();
+            validator.ValidateAndThrow(command); // Middleware katmanı hatayı yakalayıp döndürecek try-catch'e gerek kalmadı
+            command.Handle();
+            //if (!result.IsValid)
+            //    foreach (var error in result.Errors)
+            //        Console.WriteLine("Property " + error.PropertyName + " - Error Message: " + error.ErrorMessage);
+            //else
+            //    command.Handle();
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(ex.Message);
+            //}
+            //Hata Almazsa:
             return Ok();
         }
 
         [HttpPut("{id}")] // Route'dan id ile kitabı alma + güncel değerleri gönderme
         public IActionResult UpdateBook(int id, [FromBody] UpdateBookModel updatedBook)
         {
-            try
-            {
+            //try
+            //{
                 UpdateBookCommand command = new UpdateBookCommand(_context, _mapper);
                 command.BookId = id;
                 command.Model = updatedBook;
                 UpdateBookCommandValidator validator = new UpdateBookCommandValidator();
                 validator.ValidateAndThrow(command);
                 command.Handle();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(ex.Message);
+            //}
             return Ok();
         }
 
         [HttpDelete("{id}")] // Route'dan id ile kitabı alma
         public IActionResult DeleteBook(int id)
         {
-            try
-            {
+            //try
+            //{
                 DeleteBookCommand command = new DeleteBookCommand(_context);
                 command.BookId = id;
                 DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
                 validator.ValidateAndThrow(command);
                 command.Handle();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(ex.Message);
+            //}
             return Ok();
         }
     }
 }
+// Debug.WriteLine as a Log Console
+//[Request]   HTTP GET - /swagger/swagger-ui-bundle.js.map
+//[Response]  HTTP GET - /swagger/swagger-ui-bundle.js.map responded 404 in 2,2054 ms
+//[Request]   HTTP GET - /swagger/swagger-ui-standalone-preset.js.map
+//[Response]  HTTP GET - /swagger/swagger-ui-standalone-preset.js.map responded 404 in 1,52 ms
+
+//[Request]   HTTP GET - /api/Books
+//[Response]  HTTP GET - /api/Books responded 200 in 177,78 ms
+
+//[Request]   HTTP POST - /api/Books
+//[Response]  HTTP POST - /api/Books responded 200 in 63,1321 ms
+//[Error]     HTTP POST - /api/Books responded 500 with Error Message: The book is already in the system. in 3334,7758 ms.
+
+//[Request]   HTTP GET - /api/Books/7
+//[Response]  HTTP GET - /api/Books/7 responded 200 in 15,0427 ms
+
+//[Request]   HTTP PUT - /api/Books/7
+//[Response]  HTTP PUT - /api/Books/7 responded 200 in 13,003 ms
+
+//[Request]   HTTP DELETE - /api/Books/7
+//[Response]  HTTP DELETE - /api/Books/7 responded 200 in 11,5942 ms

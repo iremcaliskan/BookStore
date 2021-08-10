@@ -7,11 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Practices", "Practices", "{21B65C4E-AC15-491F-AFE4-4D34834AC002}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqPractices", "LinqPractices\LinqPractices.csproj", "{C571522D-AC1E-4307-9E81-87AFFC218D3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqPractices", "LinqPractices\LinqPractices.csproj", "{C571522D-AC1E-4307-9E81-87AFFC218D3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityViewModelDtoPractices", "EntityViewModelDtoPractices\EntityViewModelDtoPractices.csproj", "{BFF40F33-0C6D-4C2F-97F6-D53FE6BD81A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityViewModelDtoPractices", "EntityViewModelDtoPractices\EntityViewModelDtoPractices.csproj", "{BFF40F33-0C6D-4C2F-97F6-D53FE6BD81A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleWebApi", "SampleWebApi\SampleWebApi.csproj", "{2B1DD3FB-7AAE-447A-9F51-488FE19E7A7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleWebApi", "SampleWebApi\SampleWebApi.csproj", "{2B1DD3FB-7AAE-447A-9F51-488FE19E7A7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiddlewarePracticeWebApi", "MiddlewarePracticeWebApi\MiddlewarePracticeWebApi.csproj", "{91737690-8B4C-4D12-9266-579E4A0A38F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{2B1DD3FB-7AAE-447A-9F51-488FE19E7A7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B1DD3FB-7AAE-447A-9F51-488FE19E7A7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B1DD3FB-7AAE-447A-9F51-488FE19E7A7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91737690-8B4C-4D12-9266-579E4A0A38F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91737690-8B4C-4D12-9266-579E4A0A38F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91737690-8B4C-4D12-9266-579E4A0A38F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91737690-8B4C-4D12-9266-579E4A0A38F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 		{C571522D-AC1E-4307-9E81-87AFFC218D3A} = {21B65C4E-AC15-491F-AFE4-4D34834AC002}
 		{BFF40F33-0C6D-4C2F-97F6-D53FE6BD81A4} = {21B65C4E-AC15-491F-AFE4-4D34834AC002}
 		{2B1DD3FB-7AAE-447A-9F51-488FE19E7A7B} = {21B65C4E-AC15-491F-AFE4-4D34834AC002}
+		{91737690-8B4C-4D12-9266-579E4A0A38F7} = {21B65C4E-AC15-491F-AFE4-4D34834AC002}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7971767E-B1FC-42A7-B793-555EB385A9DD}

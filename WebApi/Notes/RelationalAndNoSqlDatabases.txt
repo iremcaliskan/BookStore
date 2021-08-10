@@ -1,7 +1,7 @@
 Ýliþkisel ve NoSql Veritabanlarý
 
 RDMS (Relational Database Management System) - Ýliþkisel Veritabaný Yönetim Sistemleri
-Ýliþkisel Veritabanlarý veriyi birbiri ile iliþkili bir þekilde tutmaya yarar.
+Ýliþkisel Veritabanlarý veriyi birbiri ile iliþkili bir þekilde tutmayý saðlar.
 Tablolar aracýlýðýyla veriler hem kendi içlerinde hem tablolar arasýnda iliþkili bir þekilde saklanýr.
 Tablolar satýrlar ve sütunlardan oluþur.
 Bu satýr ve sütunlar verileri daha anlamlý tutmamýzý ve okumamýzý saðlar.
@@ -120,7 +120,7 @@ Ama index kullanýlmasaydý, yani veriler yukarýdaki gibi tree yapýsýnda organize 
 Veriye ulaþmak için her zaman leaf level’a kadar inmek gerekir.
 
 Heap Table
-Sql Server’da Heap table adýnda bir kavram yok.
+Sql Server’da Heap table adýnda bir kavram yoktur.
 Bir tabloya Heap denilmesi aslýnda onun üzerinde bir Index tanýmlý olup olmamasýna baðlýdýr.
 Sql Server bir veriyi Indexsiz bir tabloya eklerken sýralý olarak diskte tutmaz ve veriler rastgele data page’lere yazýlýr.
 Bu þekilde olan tablolar Heap diye adlandýrýlýr.
@@ -164,9 +164,11 @@ Bu index’i oluþtururken sorgumuzun koþul kýsmýnda sýk kullandýðýmýz kolonlardan 
 Bir tabloda en fazla 1 tane clustered index, 999 tane de non-clustered olabilir.
 Sql Server’da bir index en fazla 16 kolon içerebilir ve toplam boyutu 900 byte’ý aþmamasý gerekir.
 Ayrýca büyük boyutlu alanlar yani varchar(max), nvarchar(max), xml, text ve image türüne sahip kolonlar üzerinde herhangi bir index tanýmlamasý yapýlamaz.
+
 Hep index’in avantajlarýndan bahsettik ama maliyetleri de çok fazladýr.
 Her index oluþturduðunuzda veritabanýnýzdan bir alan iþgal edilir.
 Index’lerin insert, update ve delete iþlemlerinde tekrardan organize olmasý gerekir ve bu durum tablo performansýný olumsuz etkiler.
+
 Bir tabloda index oluþturulmaya baþlandýðýnda Sql Server tabloyu kitler ve eriþimi engeller.
 Index oluþturma iþlemi tablodaki veri sayýsýna göre kýsa veya uzun sürebilir.
 Dolayýsýyla index seçiminde çok düþünüp dikkatli karar verilmelidir.
@@ -183,7 +185,8 @@ Hem clustered hem de non-clustered index’ler unique olarak tanýmlanabilir.
 Index Tasarýmý
 Yoðun þekilde veri güncelleme iþlemi olan tablolarda, index tanýmýnda mümkün olduðunca az kolon seçmeliyiz.
 Veri güncellemenin az olduðu tablolarda daha çok index tanýmlayabiliriz.
-Clustered index’i mümkün olduðunca az kolona tanýmlamalýyýz. Ýdeal tanýmlanma biçiminde clustered index’imiz unique olan kolonda tanýmlanmalý ve null deðeri içermemeli.
+Clustered index’i mümkün olduðunca az kolona tanýmlamalýyýz.
+Ýdeal tanýmlanma biçiminde clustered index’imiz unique olan kolonda tanýmlanmalý ve null deðeri içermemeli.
 Index tanýmladýðýmýz kolonda ne kadar tekrarlý veri varsa index performansýmýz düþük olacaktýr.
 Composite index’lerde kolonlarýn sýrasýna dikkat etmeliyiz.
 Computed kolonlara da gereksinimleri karþýladýkça index tanýmlanabilir. Yani compute edilen deðerin deterministik olmasý gerekir.
@@ -243,16 +246,16 @@ User -> Addresses
 N-N Ýliþki
 Bu iliþki tipinde tablolar arasýnda N-N bir iliþki bulunmaktadýr.
 Bu iliþkiyi 2 tablo arasýnda kurabilmek için 3. bir tabloya ihtiyacýmýz bulunmaktadýr. 
-emel olarak A tablosundaki PK ile B tablosundaki PK'yý barýndýran C tablosu üzerinden bu iliþki kurulur.
+Temel olarak A tablosundaki PK ile B tablosundaki PK'yý barýndýran C tablosu üzerinden bu iliþki kurulur.
 C tablosunda hem A hem de B tablosuna iþaret eden FK'lar vardýr.
 
 Books örneðimiz üzerinden devam edecek olursak; bir kitabýn birden fazla yazarý olabileceði gibi, ayný yazar yada yazarlarýn da birden fazla kitap yazabileceðini düþündüðümüzde
-yazar bilgisini direkt olarak Books tablosu ile iliþkilendirmemiz doðru olmayacaktýr. Bu durumda yazar bilgileri için de Authors adýnda bir tablomuz olmalý ve kitap(lar)-yazar(lar)
-bilgisi için BookAuthors gibi ayrý bir tablo oluþturmamýz gerekir. BookAuthors tablosu sayesinde kitap-yazar arasýnda N-N iliþkiyi saðlamýþ oluruz.
+yazar bilgisini direkt olarak Books tablosu ile iliþkilendirmemiz doðru olmayacaktýr. 
+Bu durumda yazar bilgileri için de Authors adýnda bir tablomuz olmalý ve kitap(lar)-yazar(lar) bilgisi için BookAuthors gibi ayrý bir tablo oluþturmamýz gerekir.
+BookAuthors tablosu sayesinde kitap-yazar arasýnda N-N iliþkiyi saðlamýþ oluruz.
 
 _books_______|____bookAuthors___|____authors___
 id(PK)       |   bookid         |   id(PK)
 title        |   authorid       |   name
 publishdate  |                  |
 pagecount    |                  |
-             |                  |

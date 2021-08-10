@@ -1,0 +1,290 @@
+﻿Middleware
+Middleware yani ara katman Client tarafından bir HTTP Request gönderildiğinde BU Request'e karşılık  HTTP Response dönene kadar geçen sürede yapılması gereken işlemler için 
+Process'in arasına girmeyi sağlayan yapılardır. Request ve Response arasına girip işlem yapmamıza olanak sağlamasının yanında, bu aralığa çoklu işlemler de dahil edebiliriz.
+Bu işlemlerin hangi sırayla yapılacağını da belirleyebiliriz.
+
+Middleware yapısı uygulamamızın HTTP Request ve Responselarını nasıl ele alacağımızı belirleyen yapıdır diyebiliriz.
+Örneğin, bir Request uygulamamıza gelirken hata durumunda neler yapılacak?
+Kimlik doğrulaması yapılmış mı?
+Belirli statik dosyalara erişim olacak mı?
+Loglanacak mı? vb. gibi Request ve Response üzerindeki işlemler Middlewarelar ile yapılır.
+Middleware'ların yaptığı iş genel olarak; gelen Requestler üzerinde sırasıyla birer logic uygulayıp bir diğer Middleware’a göndermektir.
+Böylece Requestleri rahatlıkla yönetebiliriz. 
+Her Middleware’ı bir class nesnesi olarak düşünebiliriz. Uygulamamıza gelen her request sırasıyla Middleware'ların üzerinden geçer.
+
+Middleware bileşenleri Startup.cs classının Configure metodunda belirlenir.
+Middleware bileşenleri ASP.NET’teki HttpModule’lere benzetebileceğimiz yapılar.
+Middleware'ları Configure metodunun app parametresi üzerinden çağırırız.
+
+Aşağıda her Requestin geldiğinde öncelikli olarak Authentication Middleware'ı üzerinden geçeceği daha sonra da hemen aşağısındaki Middleware'lar üzerinden geçeceği belirtilmiştir.
+Middleware metot isimleri genellikle Use ile başlatılır.
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+ {
+
+       app.UseAuthentication();
+       
+       app.UseLogRequest();
+ 
+       app.Run(async (context) =>
+       {
+         await context.Response.WriteAsync("cagatay");
+       });
+  }
+
+.Net 5'de Middleware Yapısı
+.Net 5 içerisindeki Mmiddleware'lar Startup sınıfı içerisinden Configure( Uygulamaya gelen HTTP isteklerinin hangi aşamalardan geçerek Http cevaplarının oluşturulacağının 
+belirtildiği metottur) metodu içinde saklanır. Middleware'ların çalışacağı Pipeline'ı bu metot içerisinde belirleriz.
+
+Örnek:
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    if (env.IsDevelopment())
+    { // Geliştirme ortamı ise
+        app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MiddlewareKavramı v1"));
+    }
+
+    app.UseHttpsRedirection(); // Https Yönlendirmeleri
+
+    app.UseRouting(); // Yönlendirmeler, Controllerlardan yönlendirme, patikalandırma
+
+    app.UseAuthorization(); // Kullanım Yetkilendirme
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers(); // Http Requestleri sunucaya geldiği anda nasıl maplenecek detayının verildiği kısım
+        // Endpointleri controller actionları için projeye ekler, rputing içermez
+    });
+}
+
+Yukarıdaki örnekte app.Use ile başlayan ifadeler .Net'in kendi özel Middleware'larıdır. Örneğin app.UseHttpsRedirection(); bu Middleware bir Https yönlendirmesi yapar.
+
+Custom(Kişisel-Özel) Middleware Yazmak İçin:
+Gelen Request üzerinde belli işlemler yapmak istersek kendimiz Custom Middleware yazabiliriz.
+Middleware yazmanın farklı yolları olduğu gibi kolay gelen Middleware yazma şeklini aşağıda kısaca açıklayacağım.
+
+Custom Middleware için bir Class oluşturup aşağıdaki gibi bir yapı oluşturmamız yeterlidir.
+Aşağıda Class içerisindeki Invoke metodu içerisinde Request'ler üzerinde uygulanacak iş mantığını barındıracak olup Middleware çağrıldığında otomatik tetiklenecek fonksiyondur. 
+Constructor içerisinde inject edilmiş RequestDeletage nesnesinin Invoke metodu ile de Middleware Pipeline’ında bir sonraki Middleware’ı çağırır ve httpContextimizi ona devrederiz.
+
+public class SampleMiddleware
+{
+  private readonly RequestDelegate _next;
+   
+  public SampleMiddleware(RequestDelegate next)
+  {
+     _next = next;
+  }
+
+  public async Task Invoke(HttpContext httpContext)
+  {
+
+     //iş mantıgı..
+
+     //bir sonraki middlewarei çağırır.. 
+     await _next.Invoke(httpContext);
+
+   }
+}
+
+Middleware’ı Pipeline’a dahil etmek için de Startup classının Configure metoduna aşağıdaki kod satırını eklemek yeterli olacaktır.
+app.UseMiddleware<SampleMiddleware>();
+
+Anlaşıldığı üzere Mmiddleware ile Request ve Response üzerinde işlemler yapıp Request ve Response’u handle edebiliriz.
+Request ile etkileşime geçmek için kullanılan 4 tip temel metot vardır:
+
+
+Use Metodu - app.Use()
+Bu yöntem size aşağıda da görüldüğü üzere next adında bir delegate sunar.
+Bununla bir sonraki sırada gelen Middleware üyesine erişim sağlayabiliriz.
+2 middleware nesnesinin arasına girmek amaçlı kullanılabilir.
+Devreye girdikten sonra kendinden sonraki Middleware'i tetikleyebilir ve işi bittikten sonra kaldığı yerden devam edilebilir bir yapı sunar.
+
+app.Use(async (context, next) =>
+{
+    Debug.WriteLine("Use Middleware (Start)");
+    await next.Invoke();
+    Debug.WriteLine("Use Middleware (End)");
+
+});
+
+app.Run(async context =>
+{
+    Debug.WriteLine("app.Run");
+    await context.Response.WriteAsync("Response");
+
+});
+
+Output aşağıdaki gibi olacaktır:
+– Use Middleware (Start)
+– app.Run
+– Use Middleware (End)
+
+Örneğin;
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    app.Use(async (context, next) =>
+    {
+        Consoel.WriteLine("Middleware 1 başladı.");
+
+        await next.Invoke();
+
+        Console.WriteLine("Middleware 1 sonlandırılıyor.");
+    });
+
+    app.Run(async context =>
+    {
+        Console.WriteLine("Middleware 2 kısa devre yaptırıyor.");
+    });
+}
+
+Yukarıdaki kod bloğu çalıştığında çıktısı şu şekilde olur:
+Middleware 1 başladı.
+Middleware 2 kısa devre yaptırıyor.
+Middleware 1 sonlandırılıyor.
+
+Görüldüğü üzere Middleware 1 çalıştı. İlk komutu yazdırdıktan sonra sonraki middleware'i çağırdı.
+Use metodu içerisindeki await next.Invoke(); bir sonraki middleware çağıran komuttur. 2. Middleware'de komutunu yazdırdı.
+Ama Run() metodu ile çağırıldığı için bir kısa devreye neden oldu. Kendisinden sonra bir middleware çağrımı olsaydı çalışmayacaktı.
+Pipeline sona erdiği için Middleware 1 kaldığı yerden devam etti ve komutunu ekrana yazdırıp sona erdi.
+
+
+Run Metodu - app.Run()
+Bazı metotlar pipeline içerisinde kısa devreye neden olur.
+Yani kendisinden sonraki işlemler gerçekleşmez. Bu tip meotları kullanırken dikkatli olmak gerekir. Run bunlardan biridir.
+Run ile Pipeline üzerinde short circuit(kısa devre) yapmak mümkündür.
+Request bu metoda düştükten sonra pipeline üzerindeki diğer işlemler devam etmez ve diğer Middlewarelar üzerinden geçmez.
+
+app.Run(async context =>
+{
+    await context.Response.WriteAsync("First Middleware");
+
+});
+
+app.Run(async context =>
+{
+    await context.Response.WriteAsync("Second Middleware");
+
+});
+
+Buradaki kod bloğunda First Middleware yazısının ekrana yazıldığını ve diğer run metoduna düşmeden sonlandığını görebiliriz.
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    app.Run(async context => Console.WriteLine("Middleware 1."));
+    app.Run(async context => Console.WriteLine("Middleware 2.")); // Kısa devre yaptı, 2. Middleware çalışmaz!
+}
+
+Örneğin yukarıdaki Pipeline'ı bir inceleyelim. Arka arkaya 2 middleware tetikledik.
+Normal şartlar altında bunu Run ile kullanmamış olsaydık, arka arkaya aşağıdaki ifadeleri Client'a Response olarak yazacaktı.
+
+Middleware 1. 
+Middleware 2.
+
+Ama bu pipelien çalıştığında sadece "Middleware 1." yazacak. Çünkü Run() metodu Pipeline'ın kısa devre yapmasına neden oldu. İkinci Middleware çalışamadı.
+
+
+Map Metodu - app.Map()
+Middleware'ların path bazından çalışmasını istediğimiz durumlarda kullanırız.
+Map ile adından da anlaşılacağı üzere bir path yakalamak istediğimiz zaman kullanırız.
+
+Aşağıdaki gibi "Branch" isimli map için bir iş mantığı yerleştirmek istediğimizde aşağıdaki gibi bir yol izleyebiliriz.
+app.Map(new PathString("/Branch"), _configuration =>
+{
+    _configuration.Run(async context =>
+    {
+        await context.Response.WriteAsync("Response");
+    });
+});
+
+Use() yada Run() metodunu if() statement ile yöneterekte bunu yapabiliriz. Ama Map metodu bize bunu kolayca yönetme olanağı sağlıyor.
+Örnek:
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    app.Use(async (context, next) =>
+    {
+        Console.WriteLine("Middleware 1 tetiklendi.");
+        await next.Invoke();
+    });
+
+    app.Map("/test", internalApp =>
+        internalApp.Run(async context =>
+            {
+                Console.WriteLine("/test middleware tetiklendi.");
+            }));
+}
+
+
+Yukarıdaki kod bloğu çalıştığında eğer /test Path'ine bir istek gelirse console çıktısı aşağıdaki gibi olacak:
+Middleware 1 tetiklendi.
+/test middleware tetiklendi.
+
+Path /test değil ise çıktı aşağıdaki gibi olacaktır:
+Middleware 1 tetiklendi.
+
+
+MapWhen Metodu - app.MapWhen()
+Map metodu ile sadece Path'e bazında Middleware yönetebilirken, MapWhen ile Request'e bağlı olarak her türlü yönlendirmeyi yapabiliriz.
+
+Örnek:
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    app.Use(async (context, next) =>
+    {
+        Console.WriteLine("Middleware 1 tetiklendi.");
+        await next.Invoke();
+    });
+        
+    app.MapWhen(x => x.Request.Method == "GET", internalApp =>
+    {
+        internalApp.Run(async context => await Console.WriteLine("MapWhen ile Middleware Tetiklendi."));
+    });
+}
+
+Yukarıdaki örneği inceleyecek olursak, tipi HttpGet olan requestlere özel çalışacak bir middleware yaratılmış olduğunu görürüz.
+
+
+Custom Extension Middleware Yaratmak
+Middleware'larımızı Use, Run, Map ve MapWhen gibi metotlarla tanımlayabileceğimiz için bize özel extension şeklinde de yazabiliriz.
+
+Örnek:
+public class HelloWorldMiddleware
+{
+    readonly RequestDelegate _next;
+    public HelloWorldMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task Invoke(HttpContext context)
+    {
+        Console.WriteLine("Hello World!");
+        await _next.Invoke(context);
+        Console.WriteLine("Bye World!");
+    }
+}
+
+    static public class HelloMiddlewareExtension
+    {
+        public static IApplicationBuilder UseHelloWorld(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<HelloMiddleware>();
+        }
+    }
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    {
+        app.UseHello();
+
+        app.Run(async context => await context.Response.WriteAsync("Run middleware"));
+    }
+
+Yukarıdaki örneği inceleyecek olursak öncelike bir HelloMiddleware sınıfının oluşturulduğunu ve ona ait bir Invoke() metodunun yazıldığını görüyoruz.
+await _next.Invoke(context); komut satırı ile de bir sonraki middleware çağırılıyor.
+Son olarakta ekrana Bye World! yazması bekleniyor.
+
+Son olarak HelloMiddlewareExtension Static sınıfı içerisindeki UseHelloWorld extension metodu içerisindeki UseMiddleware<HelloMiddleware>() metot çağrımı Middleware'ı ekler.
+
+Kesin bir kural olmamakla birlikte middleware ler standart olarak Use prefix'i ile başlar.

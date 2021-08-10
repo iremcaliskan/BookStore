@@ -1,52 +1,53 @@
 ﻿AutoMapper
 Automapper farklı tipteki complex objeleri birbirlerine otomatik olarak dönüştüren kütüphanedir.
-Kod kirliliğinde bizi kurtarak birden fazla satırda her bir obje elemanını tek tek dönüştürmek yerine tek satırda objenin kendisini dönüştürmemize olanak sağlar.
+Kod kirliliğinden bizi kurtararak, birden fazla satırla her bir obje elemanını tek tek dönüştürmek yerine tek satırda objenin kendisini dönüştürmemize olanak sağlar.
 Bir .Net 5 yada .Net Core Projesine Auto Mapper implemente etmek için izlenmesi gereken adımlar aşağıdaki gibidir.
 
-1.Öncelikle Automapper kütüphanesinin projeye dahil edilmesi gerekir.
+1. Öncelikle Automapper kütüphanesinin projeye dahil edilmesi gerekir.
 
-2. Proje içerisinde AutoMappper'ı servis olarak kullanabilmemiz için Startup.cs dosyası içerisindeki Configure Service metoduna aşağıdaki kod satırının eklenmesi gerekir.
+2. Proje içerisinde AutoMappper'ı servis olarak kullanabilmemiz için Startup.cs dosyası içerisindeki Configure Service metoduna servisin tanıtılması,
+aşağıdaki kod satırının eklenmesi gerekir.
 services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 3.Mapper Konfigürasyonu için Profile sınıfından kalıtım alan aşağıdaki gibi bir sınıf implemente etmemiz gerekir.
 using AutoMapper;
-using BookStoreWebApi.BookOperations.CreateBook;
-using BookStoreWebApi.BookOperations.GetBookDetail;
-using BookStoreWebApi.Entities;
+using WebApi.BookOperations.CreateBook;
+using WebApi.BookOperations.GetBookDetail;
 
-    namespace BookStoreWebApi.Common
+    namespace WebApi.Mappings
     {
-        public class MappingProfile : Profile
+        public class BookProfile : Profile
         {
             public MappingProfile(){
+                // CreateMap<source, target>();
                 CreateMap<CreateBookModel, Book>();
                 CreateMap<Book, BookDetailViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => ((GenreEnum)src.GenreId).ToString()));
             }
         }
-
     }
 
-4.Eklemiş olduğumuz Dependency Injection paketi sayesinde Controller'ın kurucu fonksiyonunda mapper'ı kod içerisinde kullanılmak üzere dahil edebiliriz.
+4. Controller'ın kurucu fonksiyonunda Mapper'ı kod içerisinde kullanılmak üzere dahil edebiliriz.
+
 private readonly IMapper _mapper;
-public BookController(BookStoreDbContext context, IMapper mapper)
-{
+public BooksController(BookStoreDbContext context, IMapper mapper)
+{ // Dependency Injection with Constructure
     _context = context;
     _mapper = mapper;
 }
 
-5.Artık kod içerisinde _mapper'ı kullanabiliriz.
+5. Artık kod içerisinde _mapper'ı dönüşümler için istediğimiz gibi kullanabiliriz.
 
-Profile sınıfından kalıtım alan sınıfa (Yukarıdaki örnekte MappingProfile) daha yakından bakmakta fayda var. Çünkü mapping konfigurasyonlarımız o sınıftan geliyor.
+Profile sınıfından kalıtım alan sınıfa (Yukarıdaki örnekte BookProfile) daha yakından baktığımızda mapping konfigurasyonlarımız o sınıftan geldiğini görüyoruz.
 
-CreateMap<Source,Target> parametreleri ile çalışır. Bu şu demek; kod içerisinde source ile belirtilen obje tipi target ile belirtilen obje tipine dönüştürülebilir.
-CreateMap<CreateBookModel, Book>();
+CreateMap<Source,Target> parametreleri ile çalışır. Kod içerisinde Source ile belirtilen obje tipi Target ile belirtilen obje tipine dönüştürülebilir.
+CreateMap<CreateBookModel, Book>(); // CreateBookModel'i Book'a dönüştür.
+Objeyi olduğu gibi çevirmek istiyorsak yani her tipteki obje fieldları birbiri ile aynı olduğu durumda yukarıdaki tanımlama yeterlidir.
 
-Objeyi olduğu gibi çevirmek istiyorsak yani her tipteki obje field ları birbiri ile aynı olduğu durumda yukarıdaki tanımlama yeterlidir.
-Mapper ile obje özelliklerinin birbirine nasıl map'laneceğini de söyleyebiliriz.
+Değişen obje özellikleri için Mapper ile obje özelliklerinin birbirine nasıl map'laneceği ise şu şekilde olur:
 CreateMap<Book, BookDetailViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => ((GenreEnum)src.GenreId).ToString()));
+// Book'u BookDetailViewModel'a dönüştür ancak Genre field'ı için şu ayarı kullan: Book'taki GenreId'nin karşılık geldiği GenreEnum sınıfından string'ini al ve maple.
 
-Yukarıdaki örneği incleyelim. Öncelikle Book tipindeki bir objenin BookDetailViewModel tipindeki bir objeye dönüştürülebildiğini görürüz.
-Ve ForMember() kullanımı da şunu söylüyor: BookDetailViewModel içerisindeki Genre özel bir şekilde oluşuyor. Source olan Book objesi içerisindeki GenreId'nin GenreEnum'daki
-string karşılığıdır. Eğer book objesi içerisine bakarsak Genre diye bir özellik göremeyiz. Ama BookDetailView modeline mapleme yaptığımızda Genre özelliğini görebiliriz.
-
-Bu ForMember() kullanımı ile istediğimiz kadar özelleştirme yapabiliriz.
+Yukarıdaki örneği incleyelim. Öncelikle Book tipindeki bir objenin BookDetailViewModel tipindeki bir objeye dönüştürülebildiğini görüyoruz.
+Ve ForMember() kullanımı da şunu söylüyor: BookDetailViewModel içerisindeki Genre özel bir şekilde oluşmaktadır. Genre, Source olan Book objesi içerisindeki GenreId'nin 
+GenreEnum'daki string karşılığıdır. Eğer book objesi içerisine bakarsak Genre diye bir özellik yoktur. Ama BookDetailView modeline mapleme yaptığımızda 
+Genre özelliğini görebiliriz. Bu ForMember() kullanımı ile istediğimiz kadar özelleştirme yapabiliriz.

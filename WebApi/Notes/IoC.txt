@@ -1,0 +1,35 @@
+﻿Dependency Injection Nedir?
+En basit tabiriyle bağımlılıkların dışarıdan enjekte edilmesidir.
+Bileşenlerin -sınıfların- birbirlerine olan bağımlılıkları azaltılarak, gevşek bağlı(Loosly couple), değiştirilebilir olmasını sağlar.
+Bu yapı sistemimizi gelişime açık, değişime kapalı (Open Closed) hale getirir.
+
+IOC Container Nedir?
+Oluşturulacak olan nesnelerin yaşam döngülerinin yönetilmesi işlemidir.
+Yani Inversion of Control (IoC) bir yazılım tasarım prensibidir ve basit tabiriyle nesnelerin uygulama boyunca ki yaşam döngüsünden sorumludur diyebiliriz.
+Uygulama içerisinde kullanılan objelerin instance'larının yönetimini sağlar ve bağımlılığı en aza indirgemeyi amaçlar.
+Yani belirlenen koşullarda, herbir request için singelton(Tekil) şekilde ilgili nesne örneğinin bizim adımıza üretilmesidir.
+IoC Container, belirlediğimiz koşulda – singelton, per request,.. – bizim yerimize nesne örneği üretir.
+
+Container program içerisinde request edilen nesneleri abstraction'lara bağlı tutarak otomatik olarak oluşturan ve bağımlılıklarını inject eden bir framework diyebiliriz.
+Oluşturmuş olduğu bu nesneleri kendi içerisinde yönetimini yaparak tekrardan ihtiyaç duyulduğunda yeni bir instance oluşturmak yerine mevcut olan nesneyi atar.
+
+IoC başlarda implementasyonundan dolayı zor ve karmaşık gibi görünsede geliştirme yaptıkça ve sağladığı kolaylıkları fark ettikçe hayran kalınacak bir yazılım tasarım prensibidir.
+Basitçe işleyişini anlatmak gerekirse; soyut tiplerin hangi somut tipler tarafından register edildiği bilgisini tutar.
+Uygulama içerisinde container'dan abstract bir nesne talebinde bulursunuz ve size register bilgisinde tanımlı olan concrete type'ın instance'ını oluşturup verir.
+Bir tür object factory olarak düşünebilirsiniz.
+
+IoC için kullanılabilecek çeşitli kütüphaneler bulunmakta. Bunlardan en popüler olanları:
+Castle Windsor
+Ninject
+StructureMap
+Autofac
+Unity
+
+Autofac Nedir?
+Autofac .Net için geliştirilmiş bir IoC Container’dır.
+
+Ninject Nedir?
+Ninject oldukça popüler IoC container'lar dan biri olup bağımlılıkları enjekte etmede kullanılan open source bir kütüphanedir.
+Dependency injection bizlere loosely coupled dediğimiz birbirlerine gevşek bağlı ve daha kolay test edilebilir geliştirmeler yapmamızı sağlayan bir design pattern'dir.
+IoC ise belli özelliklere sahip ve birbirlerine bağımlı nesnelerin işlevlerini gerçekleştirmek için ihtiyacı olan instance'ları kendilerinin değilde bir IoC container 
+tarafından yönetilmesini söyler.
