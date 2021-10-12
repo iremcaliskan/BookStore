@@ -1,19 +1,18 @@
 ﻿Middleware
-Middleware yani ara katman Client tarafından bir HTTP Request gönderildiğinde BU Request'e karşılık  HTTP Response dönene kadar geçen sürede yapılması gereken işlemler için 
-Process'in arasına girmeyi sağlayan yapılardır. Request ve Response arasına girip işlem yapmamıza olanak sağlamasının yanında, bu aralığa çoklu işlemler de dahil edebiliriz.
-Bu işlemlerin hangi sırayla yapılacağını da belirleyebiliriz.
+Middleware yani ara katman Client tarafından bir HTTP Request gönderildiğinde, bu Request'e karşılık  HTTP Response dönene kadar geçen sürede yapılması gereken işlemler için Process'in arasına girmeyi sağlayan yapılardır. 
+Request ve Response arasına girip işlem yapmamıza olanak sağlamasının yanında, bu aralığa çoklu işlemler de dahil edebiliriz. Bu işlemlerin hangi sırayla yapılacağını da belirleyebiliriz.
+Middleware yapısı uygulamamızın HTTP Request ve Response'larını nasıl ele alacağımızı belirleyen yapıdır diyebiliriz.
 
-Middleware yapısı uygulamamızın HTTP Request ve Responselarını nasıl ele alacağımızı belirleyen yapıdır diyebiliriz.
 Örneğin, bir Request uygulamamıza gelirken hata durumunda neler yapılacak?
 Kimlik doğrulaması yapılmış mı?
 Belirli statik dosyalara erişim olacak mı?
 Loglanacak mı? vb. gibi Request ve Response üzerindeki işlemler Middlewarelar ile yapılır.
-Middleware'ların yaptığı iş genel olarak; gelen Requestler üzerinde sırasıyla birer logic uygulayıp bir diğer Middleware’a göndermektir.
-Böylece Requestleri rahatlıkla yönetebiliriz. 
+
+Middleware'ların yaptığı iş genel olarak; gelen Request'ler üzerinde sırasıyla birer logic uygulayıp bir diğer Middleware’a göndermektir. Böylece Requestleri rahatlıkla yönetebiliriz. 
 Her Middleware’ı bir class nesnesi olarak düşünebiliriz. Uygulamamıza gelen her request sırasıyla Middleware'ların üzerinden geçer.
 
 Middleware bileşenleri Startup.cs classının Configure metodunda belirlenir.
-Middleware bileşenleri ASP.NET’teki HttpModule’lere benzetebileceğimiz yapılar.
+Middleware bileşenleri ASP.NET’teki HttpModule’lere benzetebileceğimiz yapılardır.
 Middleware'ları Configure metodunun app parametresi üzerinden çağırırız.
 
 Aşağıda her Requestin geldiğinde öncelikli olarak Authentication Middleware'ı üzerinden geçeceği daha sonra da hemen aşağısındaki Middleware'lar üzerinden geçeceği belirtilmiştir.
@@ -21,20 +20,16 @@ Middleware metot isimleri genellikle Use ile başlatılır.
 
 public void Configure(IApplicationBuilder app, IHostingEnvironment env)
  {
-
        app.UseAuthentication();
-       
        app.UseLogRequest();
- 
        app.Run(async (context) =>
        {
-         await context.Response.WriteAsync("cagatay");
+         await context.Response.WriteAsync("irem");
        });
   }
 
 .Net 5'de Middleware Yapısı
-.Net 5 içerisindeki Mmiddleware'lar Startup sınıfı içerisinden Configure( Uygulamaya gelen HTTP isteklerinin hangi aşamalardan geçerek Http cevaplarının oluşturulacağının 
-belirtildiği metottur) metodu içinde saklanır. Middleware'ların çalışacağı Pipeline'ı bu metot içerisinde belirleriz.
+.Net 5 içerisindeki Middleware'lar Startup sınıfı içerisinden Configure( Uygulamaya gelen HTTP isteklerinin hangi aşamalardan geçerek Http cevaplarının oluşturulacağının belirtildiği metottur) metodu içinde saklanır. Middleware'ların çalışacağı Pipeline'ı bu metot içerisinde belirleriz.
 
 Örnek:
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -92,9 +87,8 @@ public class SampleMiddleware
 Middleware’ı Pipeline’a dahil etmek için de Startup classının Configure metoduna aşağıdaki kod satırını eklemek yeterli olacaktır.
 app.UseMiddleware<SampleMiddleware>();
 
-Anlaşıldığı üzere Mmiddleware ile Request ve Response üzerinde işlemler yapıp Request ve Response’u handle edebiliriz.
+Anlaşıldığı üzere Middleware ile Request ve Response üzerinde işlemler yapıp Request ve Response’u handle edebiliriz.
 Request ile etkileşime geçmek için kullanılan 4 tip temel metot vardır:
-
 
 Use Metodu - app.Use()
 Bu yöntem size aşağıda da görüldüğü üzere next adında bir delegate sunar.
@@ -200,6 +194,7 @@ app.Map(new PathString("/Branch"), _configuration =>
 });
 
 Use() yada Run() metodunu if() statement ile yöneterekte bunu yapabiliriz. Ama Map metodu bize bunu kolayca yönetme olanağı sağlıyor.
+
 Örnek:
 public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 {
@@ -252,7 +247,7 @@ Middleware'larımızı Use, Run, Map ve MapWhen gibi metotlarla tanımlayabilece
 Örnek:
 public class HelloWorldMiddleware
 {
-    readonly RequestDelegate _next;
+    private readonly RequestDelegate _next;
     public HelloWorldMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -264,7 +259,7 @@ public class HelloWorldMiddleware
         await _next.Invoke(context);
         Console.WriteLine("Bye World!");
     }
-}
+
 
     static public class HelloMiddlewareExtension
     {
@@ -273,6 +268,7 @@ public class HelloWorldMiddleware
             return builder.UseMiddleware<HelloMiddleware>();
         }
     }
+}
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {

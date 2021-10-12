@@ -2,12 +2,14 @@
 using System;
 using System.Linq;
 using WebApi.DbOperations;
+using WebApi.Entities;
 
-namespace WebApi.BookOperations.CreateBook
+namespace WebApi.Application.BookOperations.Commands.CreateBook
 {
     public class CreateBookCommand
     {
         public CreateBookModel Model { get; set; } // Model dışarıdan gelecek
+
         private readonly BookStoreDbContext _context;
         private readonly IMapper _mapper;
         public CreateBookCommand(BookStoreDbContext context, IMapper mapper)
@@ -18,7 +20,7 @@ namespace WebApi.BookOperations.CreateBook
 
         public void Handle()
         {
-            var book = _context.Books.SingleOrDefault(x => x.Title == Model.Title);
+            var book = _context.Books.FirstOrDefault(x => x.Title == Model.Title && x.AuthorId == Model.AuthorId && x.GenreId == Model.GenreId);
             if (book is not null)
             {
                 throw new InvalidOperationException("The book is already in the system.");
@@ -41,8 +43,9 @@ namespace WebApi.BookOperations.CreateBook
 
     public class CreateBookModel
     { // Post ve Put işlemleri için, aynı gözükse bile ek sınıf yazılmalıdır, ileride işler değişir.
+        public int AuthorId { get; set; }
+        public int GenreId { get; set; }
         public string Title { get; set; }
-        public int GenreId { get; set; } // Türü
         public int PageCount { get; set; }
         public DateTime PublishDate { get; set; }
     }

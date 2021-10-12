@@ -1,47 +1,47 @@
 ﻿using AutoMapper;
-using System;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using WebApi.DbOperations;
 
-namespace WebApi.BookOperations.GetBookDetail
+namespace WebApi.Application.BookOperations.Queries.GetBooks
 {
-    public class GetBookDetailQuery
+    public class GetBooksQuery
     {
         private readonly BookStoreDbContext _context;
         private readonly IMapper _mapper;
-        public int BookId { get; set; }
-        public GetBookDetailQuery(BookStoreDbContext context, IMapper mapper)
+        public GetBooksQuery(BookStoreDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public BookDetailViewModel Handle()
+        public List<BooksViewModel> Handle()
         {
-            var book = _context.Books.Where(x => x.Id == BookId).SingleOrDefault();
-            if (book is null)
-            {
-                throw new InvalidOperationException("Book is not found!");
-            }
-
-            //BookDetailViewModel vm = new BookDetailViewModel()
+            var bookList = _context.Books.Include(x => x.Author).Include(x => x.Genre).OrderBy(x => x.Id).ToList();
+            //var vm = new List<BooksViewModel>();
+            //foreach (var book in bookList)
             //{
-            //    Title = book.Title,
-            //    Genre = ((GenreEnum)book.GenreId).ToString(),
-            //    PageCount = book.PageCount,
-            //    PublishDate = book.PublishDate.ToString("dddd/MM/yyyy")
-            //};
+            //    vm.Add(new BooksViewModel()
+            //    {
+            //        Title = book.Title,
+            //        Genre = ((GenreEnum)book.GenreId).ToString(),
+            //        PageCount = book.PageCount,
+            //        PublishDate = book.PublishDate.Date.ToString("dd/MM/yyyy")
+            //    });
+            //}
 
-            // Gelen Book'u BookDetailViewModel olarak maple ve döndür
-            var vm = _mapper.Map<BookDetailViewModel>(book);
+            // Book list'i BooksViewModel list olarak maple ve döndür
+            var vm = _mapper.Map<List<BooksViewModel>>(bookList);
             return vm;
         }
     }
 
-    public class BookDetailViewModel
+    public class BooksViewModel
     { // UI'a(View'a) dönecek bilgiler için ViewModel kullanılımalıdır.
         public string Title { get; set; }
-        public string Genre { get; set; } // Türü
+        public string AuthorFullName { get; set; }
+        public string Genre { get; set; }
         public int PageCount { get; set; }
         public string PublishDate { get; set; }
     }

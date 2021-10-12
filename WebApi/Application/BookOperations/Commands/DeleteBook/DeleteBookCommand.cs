@@ -2,12 +2,13 @@
 using System.Linq;
 using WebApi.DbOperations;
 
-namespace WebApi.BookOperations.DeleteBook
+namespace WebApi.Application.BookOperations.Commands.DeleteBook
 {
     public class DeleteBookCommand
     {
-        private readonly BookStoreDbContext _context;
         public int BookId { get; set; }
+
+        private readonly BookStoreDbContext _context;
         public DeleteBookCommand(BookStoreDbContext context)
         {
             _context = context;
@@ -15,7 +16,7 @@ namespace WebApi.BookOperations.DeleteBook
 
         public void Handle()
         {
-            var book = _context.Books.SingleOrDefault(x => x.Id == BookId);
+            var book = _context.Books.FirstOrDefault(x => x.Id == BookId);
             if (book is null)
             {
                 throw new InvalidOperationException("No book found to be deleted!");

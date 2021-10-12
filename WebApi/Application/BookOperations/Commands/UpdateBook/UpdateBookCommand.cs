@@ -2,15 +2,17 @@
 using System;
 using System.Linq;
 using WebApi.DbOperations;
+using WebApi.Entities;
 
-namespace WebApi.BookOperations.UpdateBook
+namespace WebApi.Application.BookOperations.Commands.UpdateBook
 {
     public class UpdateBookCommand
     {
-        private readonly BookStoreDbContext _context;
-        private readonly IMapper _mapper;
         public int BookId { get; set; }
         public UpdateBookModel Model { get; set; }
+
+        private readonly BookStoreDbContext _context;
+        private readonly IMapper _mapper;
         public UpdateBookCommand(BookStoreDbContext context, IMapper mapper)
         {
             _context = context;
@@ -19,7 +21,7 @@ namespace WebApi.BookOperations.UpdateBook
 
         public void Handle()
         {
-            var book = _context.Books.SingleOrDefault(x => x.Id == BookId);
+            var book = _context.Books.FirstOrDefault(x => x.Id == BookId);
             if (book is null)
             {
                 throw new InvalidOperationException("No book found to be updated!");
@@ -29,8 +31,11 @@ namespace WebApi.BookOperations.UpdateBook
             //book.Title = Model.Title != default ? Model.Title : book.Title; // null, empty string değilse
 
             var vm = _mapper.Map<Book>(book);
-            vm.GenreId = Model.GenreId != default ? Model.GenreId : book.GenreId; // 0 değilse? Default'u değişmiş mi? Değişmişse Model değişmemişse book GenreId
-            vm.Title = Model.Title != default ? Model.Title : book.Title; // null, empty string değilse
+            vm.AuthorId = Model.AuthorId != default ? Model.AuthorId : book.AuthorId;
+            vm.GenreId = Model.GenreId != default ? Model.GenreId : book.GenreId; // 0 değilse? Default'u değişmişse Model, değişmemişse book GenreId
+            vm.Title = Model.Title != default ? Model.Title : book.Title; // String default null
+            vm.PageCount = Model.PageCount != default ? Model.PageCount : book.PageCount; // Int default 0
+            vm.PublishDate = Model.PublishDate != default ? Model.PublishDate : book.PublishDate; // Datetime default 0001
 
             _context.SaveChanges();
         }
@@ -38,7 +43,10 @@ namespace WebApi.BookOperations.UpdateBook
 
     public class UpdateBookModel
     { // Güncellenebilir değerler
-        public string Title { get; set; }
+        public int AuthorId { get; set; }
         public int GenreId { get; set; }
+        public string Title { get; set; }
+        public int PageCount { get; set; }
+        public DateTime PublishDate { get; set; }
     }
 }
