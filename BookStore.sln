@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityViewModelDtoPractices
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleWebApi", "SampleWebApi\SampleWebApi.csproj", "{2B1DD3FB-7AAE-447A-9F51-488FE19E7A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiddlewarePracticeWebApi", "MiddlewarePracticeWebApi\MiddlewarePracticeWebApi.csproj", "{91737690-8B4C-4D12-9266-579E4A0A38F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiddlewarePracticeWebApi", "MiddlewarePracticeWebApi\MiddlewarePracticeWebApi.csproj", "{91737690-8B4C-4D12-9266-579E4A0A38F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.UnitTests", "WebApi.UnitTests\WebApi.UnitTests.csproj", "{6007B7BD-52A2-4F2E-8805-15D7B08CCF47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{91737690-8B4C-4D12-9266-579E4A0A38F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91737690-8B4C-4D12-9266-579E4A0A38F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91737690-8B4C-4D12-9266-579E4A0A38F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6007B7BD-52A2-4F2E-8805-15D7B08CCF47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6007B7BD-52A2-4F2E-8805-15D7B08CCF47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6007B7BD-52A2-4F2E-8805-15D7B08CCF47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6007B7BD-52A2-4F2E-8805-15D7B08CCF47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

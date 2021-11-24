@@ -3,7 +3,7 @@ using WebApi.Entities;
 
 namespace WebApi.DbOperations
 {
-    public class BookStoreDbContext : DbContext
+    public class BookStoreDbContext : DbContext, IBookStoreDbContext
     {
         public BookStoreDbContext()
         {
@@ -26,6 +26,11 @@ namespace WebApi.DbOperations
             // Statik liste ile çalışmanın karşılığıdır.
 
             // UseInMemoryDatabase does not determine a real database, it's for just testing operations.
+        }
+
+        public override int SaveChanges() // DbContext'in otomatik doldurduğu SaveChanges'ı yeniden yazıp aynı işlemi yaptırarak IBookStoreDbContext üzerinden de erişime açılması sağlandı
+        {
+            return base.SaveChanges();
         }
 
         // Veritabanı tablosuna karşılık gelen entity eşleştirmesi

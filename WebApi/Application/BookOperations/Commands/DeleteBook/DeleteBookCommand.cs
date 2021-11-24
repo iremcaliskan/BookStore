@@ -8,8 +8,8 @@ namespace WebApi.Application.BookOperations.Commands.DeleteBook
     {
         public int BookId { get; set; }
 
-        private readonly BookStoreDbContext _context;
-        public DeleteBookCommand(BookStoreDbContext context)
+        private readonly IBookStoreDbContext _context;
+        public DeleteBookCommand(IBookStoreDbContext context)
         {
             _context = context;
         }

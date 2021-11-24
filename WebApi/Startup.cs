@@ -39,6 +39,7 @@ namespace WebApi
             services.AddAutoMapper(Assembly.GetExecutingAssembly()); // AutoMapper çalýþan assemblylerini yani configlerini alarak sisteme tanýtýlýr
 
             services.AddSingleton<ILoggerService, ConsoleLogger>();
+            services.AddScoped<IBookStoreDbContext>(provider => provider.GetService<BookStoreDbContext>()); // Her Request'e istinaden response dönene kadar context nesnesi üretip, response ile sonlandýrýr. Yeni Request te tekrar bir context oluþur.
             //services.AddSingleton<ILoggerService, DBLogger>();
         }
 

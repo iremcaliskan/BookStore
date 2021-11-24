@@ -9,7 +9,7 @@ namespace WebApi.Application.AuthorOperations.Commands.UpdateAuthor
         {
             RuleFor(x => x.Model.FirstName).NotNull().NotEmpty();
             RuleFor(x => x.Model.LastName).NotNull().NotEmpty();
-            RuleFor(x => x.Model.Birthdate).NotEmpty().LessThan(DateTime.Now);
+            RuleFor(x => x.Model.Birthdate.Date).NotEmpty().LessThan(DateTime.Now.Date);
         }
     }
 }

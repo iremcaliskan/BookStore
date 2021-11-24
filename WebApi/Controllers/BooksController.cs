@@ -15,7 +15,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly BookStoreDbContext _context;
+        private readonly IBookStoreDbContext _context;
         private readonly IMapper _mapper;
 
         //private static List<Book> BookList = new List<Book>()
@@ -136,7 +136,7 @@ namespace WebApi.Controllers
         //    return Ok();
         //}
 
-        public BooksController(BookStoreDbContext context, IMapper mapper)
+        public BooksController(IBookStoreDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
