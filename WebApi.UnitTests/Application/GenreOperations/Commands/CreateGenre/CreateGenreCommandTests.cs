@@ -22,7 +22,7 @@ namespace WebApi.UnitTests.Application.GenreOperations.Commands.CreateGenre
         }
 
         [Fact] // Fact attribute define us that the method is a test method, Fact works for test data running in one condition
-        public void WhenAlreadyExistGenreNameIsGiven_InvalidOperationException_ShouldBeReturn() // Parameter-less
+        public void Fact_WhenAlreadyExistGenreNameIsGiven_InvalidOperationException_ShouldBeReturn() // Parameter-less
         {
             // arrange (preparation) -- hazirlama
             var genre = new Genre() { Name = "Genre"};
@@ -39,11 +39,34 @@ namespace WebApi.UnitTests.Application.GenreOperations.Commands.CreateGenre
         }
 
         [Fact] // Happy Path
-        public void WhenValidInputsAreGiven_Genre_ShouldBeCreated()
+        public void Fact_WhenValidInputsAreGiven_Genre_ShouldBeCreated()
         {
             // arrange (preparation) -- hazirlama
             CreateGenreCommand command = new(_context, _mapper);
             command.Model = new CreateGenreModel() { Name = "Genre"};
+
+            // act (run) -- calistirma
+            FluentActions.Invoking(() => command.Handle()).Invoke();
+
+            // assert (defend) -- iddia etmek
+            var addedGenre = _context.Genres.FirstOrDefault(x => x.Name == command.Model.Name);
+            addedGenre.Should().NotBeNull();
+            addedGenre.Name.Should().Be(command.Model.Name);
+        }
+
+        [Theory]
+        //[InlineData(null)]
+        [InlineData("")]
+        [InlineData("n")]
+        [InlineData("na")]
+        [InlineData("nam")]
+        [InlineData("name")] // Min Length is 4
+        [InlineData("name1")]
+        public void Theory_WhenValidNamesAreGiven_Genre_ShouldBeCreated(string name)
+        {
+            // arrange (preparation) -- hazirlama
+            CreateGenreCommand command = new(_context, _mapper);
+            command.Model = new CreateGenreModel() { Name = name };
 
             // act (run) -- calistirma
             FluentActions.Invoking(() => command.Handle()).Invoke();

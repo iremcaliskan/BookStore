@@ -10,16 +10,16 @@ namespace WebApi.UnitTests.Application.BookOperations.Commands.UpdateBook
         [Fact]
         public void Fact_WhenInvalidInputsAreGiven_Validator_ShouldBeReturnErrors()
         {
-            // arrange (Hazırlama)
+            // arrange (Hazirlama)
             UpdateBookCommand command = new(null, null);
             command.BookId = 0;
             command.Model = new UpdateBookModel() { Title = "", PageCount = 0, PublishDate = DateTime.Now, GenreId = 0, AuthorId = 0 };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             UpdateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
 
-            // assert (Doğrulama)
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().BeGreaterThan(0);
         }
 
@@ -42,50 +42,51 @@ namespace WebApi.UnitTests.Application.BookOperations.Commands.UpdateBook
         [InlineData(1, "Book", 100, 0, 0)]
         [InlineData(1, "Book", 100, 1, 0)]
         [InlineData(1, "Book", 100, 0, 1)]
-        //[InlineData(1, "Book", 100, 1, 1)] // passed
+        //[InlineData(1, "Book", 100, 1, 1)] -- passed
         public void Theory_WhenInvalidInputsAreGiven_Validator_ShouldBeReturnErrors(int bookId, string title, int pageCount, int genreId, int authorId)
         {
-            // arrange (Hazırlama)
-            UpdateBookCommand command = new(null, null); // Update işlemi ile değil, doğrulama ile ilgileniyoruz.
+            // arrange (Hazirlama)
+            UpdateBookCommand command = new(null, null); // Update islemi ile degil, dogrulama ile ilgileniyoruz
             command.BookId = bookId;
             command.Model = new UpdateBookModel() { Title = title, PageCount = pageCount, PublishDate = DateTime.Now.AddYears(-1), GenreId = genreId, AuthorId = authorId };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             UpdateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
 
-            // assert (Doğrulama)
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().BeGreaterThan(0);
         }
 
         [Fact] // For Datetime control, other values have to be valid
-        public void WhenDateTimeDateEqualsNowIsGiven_Validator_ShouldBeReturnError()
+        public void Fact_WhenDateTimeDateEqualsNowIsGiven_Validator_ShouldBeReturnError()
         {
-            // arrange (Hazırlama)
+            // arrange (Hazirlama)
             UpdateBookCommand command = new(null, null);
             command.BookId = 1;
             command.Model = new UpdateBookModel() { Title = "Book", PageCount = 100, PublishDate = DateTime.Now.Date, GenreId = 1, AuthorId = 1 };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             UpdateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
 
-            // assert (Doğrulama)
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().BeGreaterThan(0);
         }
 
         [Fact] // Happy Path
         public void WhenValidInputsAreGiven_Validator_ShouldBeReturnSuccess()
         {
-            // arrange (Hazırlama)
+            // arrange (Hazirlama)
             UpdateBookCommand command = new(null, null);
+            command.BookId = 1;
             command.Model = new UpdateBookModel() { Title = "Book", PageCount = 100, PublishDate = DateTime.Now.Date.AddYears(-2), GenreId = 1, AuthorId = 1 };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             UpdateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
 
-            // assert (Doğrulama)
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().Be(0);
         }
     }

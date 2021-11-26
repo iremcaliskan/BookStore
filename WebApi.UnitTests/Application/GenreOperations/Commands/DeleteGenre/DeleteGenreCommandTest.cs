@@ -23,7 +23,7 @@ namespace WebApi.UnitTests.Application.GenreOperations.Commands.DeleteGenre
         [InlineData(8)]
         [InlineData(9)]
         [InlineData(10)]
-        public void WhenNotExistedIdIsGiven_InvalidOperationException_ShouldBeReturn(int genreId)
+        public void Theory_WhenNotExistedIdIsGiven_InvalidOperationException_ShouldBeReturn(int genreId)
         {
             // arrange (preparation) -- hazirlama
             DeleteGenreCommand command = new(_context);
@@ -36,7 +36,7 @@ namespace WebApi.UnitTests.Application.GenreOperations.Commands.DeleteGenre
         }
 
         [Fact]
-        public void WhenValidIdIsGiven_Book_ShouldBeDeleted()
+        public void Fact_WhenValidIdIsGiven_Book_ShouldBeDeleted()
         {
             // arrange (preparation) -- hazirlama
             DeleteGenreCommand command = new(_context);

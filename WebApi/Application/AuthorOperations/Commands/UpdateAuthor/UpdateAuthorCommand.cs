@@ -27,12 +27,11 @@ namespace WebApi.Application.AuthorOperations.Commands.UpdateAuthor
                 throw new InvalidOperationException("No author found to be updated!");
             }
 
-            var vm = _mapper.Map<Author>(Model);
-            vm.FirstName = Model.FirstName != default ? Model.FirstName : author.FirstName;
-            vm.LastName = Model.LastName != default ? Model.LastName : author.LastName;
+            var vm = _mapper.Map<Author>(author);
+            vm.FirstName = Model.FirstName ?? author.FirstName;
+            vm.LastName = Model.LastName ?? author.LastName;
             vm.Birthdate = Model.Birthdate != default ? Model.Birthdate : author.Birthdate;
 
-            _context.Authors.Update(vm);
             _context.SaveChanges();
         }
     }

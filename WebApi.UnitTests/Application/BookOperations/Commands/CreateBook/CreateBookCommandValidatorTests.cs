@@ -7,20 +7,20 @@ namespace WebApi.UnitTests.Application.BookOperations.Commands.CreateBook
 {
     public class CreateBookCommandValidatorTests
     {
-
         [Fact]
         public void Fact_WhenInvalidInputsAreGiven_Validator_ShouldBeReturnErrors()
         {
-            // arrange (Hazırlama)
+            // arrange (Hazirlama)
             CreateBookCommand command = new(null, null);
             command.Model = new CreateBookModel() { Title = "", PageCount = 0, PublishDate = DateTime.Now, GenreId = 0, AuthorId = 0 };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             CreateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
-            // act & assert (Çalıştırma ve Doğrulama)
 
-            // assert (Doğrulama)
+            // act & assert (Calistirma ve Dogrulama)
+
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().BeGreaterThan(0);
         }
 
@@ -34,54 +34,54 @@ namespace WebApi.UnitTests.Application.BookOperations.Commands.CreateBook
         [InlineData("Book", 100, 0, 0)]
         [InlineData("Book", 100, 1, 0)]
         [InlineData("Book", 100, 0, 1)]
-        //[InlineData("Book", 100, 1, 1)] -- pass
+        //[InlineData("Book", 100, 1, 1)] -- testi gecer
         public void Theory_WhenInvalidInputsAreGiven_Validator_ShouldBeReturnErrors(string title, int pageCount, int genreId, int authorId)
         {
-            // arrange (Hazırlama)
+            // arrange (Hazirlama)
             CreateBookCommand command = new(null, null);
             command.Model = new CreateBookModel() { Title = title, PageCount = pageCount, PublishDate = DateTime.Now.AddYears(-1), GenreId = genreId, AuthorId = authorId };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             CreateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
 
-            // act & assert (Çalıştırma ve Doğrulama)
+            // act & assert (Calistirma ve Dogrulama)
 
-            // assert (Doğrulama)
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().BeGreaterThan(0);
         }
 
-        [Fact] // Sadece DateTime kontrolü için diğer caseler doğru atanmalı
-        public void WhenDateTimeDateEqualsNowIsGiven_Validator_ShouldBeReturnError()
+        [Fact] // Sadece DateTime kontrolu icin diger caseler dogru atanmali
+        public void Fact_WhenDateTimeDateEqualsNowIsGiven_Validator_ShouldBeReturnError()
         {
-            // arrange (Hazırlama)
+            // arrange (Hazirlama)
             CreateBookCommand command = new(null, null);
             command.Model = new CreateBookModel() { Title = "Book", PageCount = 100, PublishDate = DateTime.Now.Date, GenreId = 1, AuthorId = 1 };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             CreateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
 
-            // act & assert (Çalıştırma ve Doğrulama)
+            // act & assert (Calistirma ve Dogrulama)
 
-            // assert (Doğrulama)
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().BeGreaterThan(0);
         }
 
         [Fact] // Happy Path
-        public void WhenValidInputsAreGiven_Validator_ShouldBeReturnSuccess()
+        public void Fact_WhenValidInputsAreGiven_Validator_ShouldBeReturnSuccess()
         {
-            // arrange (Hazırlama)
+            // arrange (Hazirlama)
             CreateBookCommand command = new(null, null);
             command.Model = new CreateBookModel() { Title = "Book", PageCount = 100, PublishDate = DateTime.Now.Date.AddYears(-2), GenreId = 1, AuthorId = 1 };
 
-            // act (Çalıştırma)
+            // act (Calistirma)
             CreateBookCommandValidator validator = new();
             var validationResult = validator.Validate(command);
 
-            // act & assert (Çalıştırma ve Doğrulama)
+            // act & assert (Calistirma ve Dogrulama)
 
-            // assert (Doğrulama)
+            // assert (Dogrulama)
             validationResult.Errors.Count.Should().Be(0);
         }
     }

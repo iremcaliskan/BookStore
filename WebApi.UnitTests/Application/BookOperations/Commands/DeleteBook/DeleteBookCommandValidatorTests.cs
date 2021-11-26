@@ -39,7 +39,7 @@ namespace WebApi.UnitTests.Application.BookOperations.Commands.DeleteBook
         }
 
         [Fact] // Happy Path
-        public void WhenValidInputIsGiven_Validator_ShouldBeReturnSuccess()
+        public void Fact_WhenValidInputIsGiven_Validator_ShouldBeReturnSuccess()
         {
             // arrange (preparation) -- hazirlama
             DeleteBookCommand command = new(null);
