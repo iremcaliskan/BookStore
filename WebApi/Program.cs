@@ -6,25 +6,25 @@ using WebApi.DbOperations;
 namespace WebApi
 {
     public class Program
-    {// Uygulama her çalýþtýðýnda ayný veritabanýnýn oluþur
+    {// Uygulama her calistiginda ayni veritabanini olusturur
         // Write the initial data to in memory db since the application is up
         public static void Main(string[] args)
         {
-            // Uygulamanýn çalýþacaðý host alýnýr
+            // Uygulamanin calisacagi host alinir
             // Get the IWebHost which will host this application
             var host = CreateHostBuilder(args).Build();
-            // Scope içerisine servis katmaný koyulur
+            // Scope icerisine servis katmani koyulur
             // Find the service layer within our scope
             using (var scope = host.Services.CreateScope())
             {
-                // BookStoreDbContext sýnýfýnýn örneði servis katmaný içerisinden alýnýr
+                // BookStoreDbContext sinifinin orengi servis katmani icerisinden alinir
                 // Get the instance of BookStoreDbContext in our services layer
                 var serviceProvider = scope.ServiceProvider;
-                // DataGenerator metodu çaðrýlarak örnek data oluþturulur
+                // DataGenerator metodu cagrilarak ornek data olusturulur
                 // Call the DataGenerator to create sample data
                 DataGenerator.Initialize(serviceProvider);
             }
-            // Host çalýþtýrýlýr
+            // Host calistirilir
             // Continue to run the application
             host.Run();
         }
