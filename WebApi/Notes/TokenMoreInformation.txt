@@ -1,0 +1,152 @@
+﻿Web Servis Nedir?
+Web servisler, farklı platformların arasındaki iletişimi standardize edilmiş bir takım protokellere ve veri formatlarına göre yapabilmeyi sağlayan yazılımlardır.
+
+Bir Web servisinde, HTTP gibi bir Web teknolojisi orijinal olarak insandan makineye iletişim için tasarlanmıştır.
+HTML, XML, JSON gibi makine tarafından okunabilen dosya formatlarını aktarmak için kullanılır.
+
+	Web Servis Çeşitleri
+		Farklı görevlere sahip bir çok web servis teknolojisi vardır. Günümüzde en çok kullanılan bir kaç web servis teknolojine değinelim;
+			XML-RPC
+			UDDI
+			SOAP
+			REST
+
+XML-RPC
+Remote Procedure Call, bir ağdaki çeşitli cihazlar arasında veri alışverişi yapmak için en temel XML protokolüdür.
+Verileri hızlı ve kolay bir şekilde aktarmak ve diğer bilgileri istemciden sunucuya iletmek için HTTP protokolünü kullanır.
+
+UDDI
+Universal Description, Discovery, and Integration, web servislerini yayınlamak ve keşfetmek için XML tabanlı bir standarttır. 
+
+SOAP
+Simple Object Access Protocol, dağıtık uygulamalarda ve web servislerinin haberleşmesinde kullanılmak üzere tasarlanan, XML-RPC  modelini kullanan, istemci/sunucu mantığına dayalı bir protokoldür.
+Daha genel olarak SOAP, web üzerinden fonksiyonları kullanmak için geliştirilmiş bir sistemin XML tabanlı kurallar topluluğudur.
+
+Service-Oriented Architecture felsefesini pratiğe uyarlayan iki interface'den biridir.
+Üzerinde bulunan Universal Description Discovery and Integration (UDDI) ile birlikte hizmet yönelimli mimarinin pratikte kullanılmasını mümkün kılar.
+
+REST
+REpresentational State Transfer, istemci-sunucu arasında HTTP protokolünü kullanarak veri format kısıtlaması (HTML,XML,JSON,TEXT vb.) yapmadan veri aktarımı sağlayan bir mimaridir.
+REST mimarisine uygun olan servislere RESTful adı verilmektedir.
+
+REST mimarisi stateless olup, herhangi bir durum bilgisi saklamaz.
+Dolayısıyla istemci-sunucu arasında taşınan verilerde istemciye ait herhangi bir veri bulunmaz.
+
+API Nedir?
+Application Programming Interface, bir yazılımın başka bir yazılımda tanımlanmış işlevlerini kullanabilmesi için oluşturulmuş bir tanım bütünüdür.
+API, Web uygulaması, İşletim sistemi, veritabanı, donanımlar gibi bir çok alanda yazılım kütüphanesi için kullanılabilir.
+API'nin istemci-sunucu arasında web uygulamalarında kullanılan tanım haline Web API denir.
+
+	API vs Web Servis
+	API bir yazılımdır, Web Servis bir mimari yada web teknolojisidir.
+	Her Web Servis bir API olabilir ama her API bir web servis olamaz.
+	API herhangi bir standarta bağlı olmadan oluşturulabilir. Web Service, RFC standartlarını kullanır.
+
+Web API'lerde Doğrulama (Authentication)
+Web API üzerinden yetkisiz erişimleri engellemek için istemci-sunucu arasında bir birini tanıma işlemini yapabilmek için Authentication yöntemleri kullanır.
+Günümüzde birçok farklı mimaride ve teknolojide Authentication yöntemleri vardır. 
+
+Bunlardan birkaç tanesi:
+Basic
+Bearer (Token)
+OAuth2
+HMAC
+
+Basic Authentication
+HTTP protokolü üzerideki Header alanı üzerinden İstemci'den Sunucu'ya iletilen BASE64 ile encode edilmiş bir veri ile kimlik doğrulama işlemidir.
+
+HTTP Request Header :
+	Header_Name : Basic BASE64({VERI_I}{AYRAÇ}{VERI_II})
+
+Basic Authentication Client(İstemci)-Server(Sunucu) arasında encode/decode işlemi BASE64 ile yapıldığı için çözülmesi kolaydır.
+HTTPS ile iletilmesi tavsiye edilir.
+Public (Herkese Açık) API uygulamalarında kullanılmaması tavsiye edilir.
+İstemci tarafından oturum kapatma işlemi bu yöntem ile yapılamaz.
+Oturum süresi, oturum durumu gibi istemci tarafı bilgiler bu yöntem ile işlenemez.
+Standart halinde `Authentication` adı altından HTTP Request Header ile Basic kelimesi, boşluk ve veri halinde gönderilmesi tavsiye edilir.
+Bu yöntem ile kimlik verileri her istekte gönderilir.
+
+	Digest Authentication
+    HTTP Digest Authentication, Basic Authentication'daki parolanın güvensiz ortamda karşı tarafa gönderilmesi problemini çözmek üzere ortaya çıkmıştır.
+	Burada istemci parolanın kendisini göndermek yerine parolanın Digest'ını (Hash) alarak sunucuya gönderir.
+	Parolanın kendisi ya da Hash'i sunucu tarafında da tutulduğu için sunucu isteğin kimden geldiğini doğrulayabilir.
+	Bu yöntemin iletim katmanı şifrelenmemiş bir ortamda kullanılması durumunda kötü amaçlı kişilerin parolayı öğrenemese bile Hash'ini öğrenebileceği öngörülmüştür.
+
+Bearer Authentication
+Bearer kimlik doğrulaması (ya da token bazlı doğrulama), Bearer olarak adlandırılan kimlik doğrulama alanları içeren bir HTTP kimlik doğrulama şemasıdır.
+Belirli bir kaynağa veya URL'ye erişime izin veren kimlikler genellikle bir oturum açma isteğine yanıt olarak sunucu tarafından oluşturulan şifreli bir dize veridir.
+
+Authorization: Bearer <token>
+
+İstemci-sunucu arasında bir kez kimlik doğrulama yapıldıktan sonra sunucu tarafından istemciye bir şifreli veri verilir, bu veri ile istemci her isteğinde sunucu tarafından kimlik doğrulması yapabilir bu şekilde istemci her seferinde güvenlik verilerinin gönderilmesinin önüne geçilir.
+
+İstemci bir sunucuya kendisini doğrulattıktan sonra kendisine (MAC, IP veya bazen ikisi de alınarak ya da başka veriler ile) ait benzersiz(unique) bir anahtar oluşturulur ve bu anahtar ile sonraki işlemlerinde kendisini sisteme doğrulatır.
+Bu doğrulama esnasında ilgili anahtar farklı şekillerde gönderilebilir. 
+
+Bu yöntemler günümüze kadar HTTP üzerinden:
+Body (Gövde) içinde bir alan olarak, 
+Header içerisinde (Authorization: Apikey BFEBFBFF000506E3-QCQRL1061100G3), 
+Basic içerisinde (Authorization: Basic BFEBFBFF000506E3-QCQRL1061100G3), 
+Query String (?apikey=BFEBFBFF000506E3-QCQRL1061100G3) şeklinde gönderildiği gözlenmiştir.
+
+Bu yöntem üzerinden oluşturulan şifreli veri istemci üzerinden saklanması gerekmektedir.
+Kullanımı ve uygulaması kolay olduğu için çokça tercih edilir.
+Her istek ile sunucu tarafından işlem yükü oluşur.
+İstemci tarafından saklandığı için üçüncü kişiler tarafından ele geçirebileceği unutmamalıdır.
+Şifreleme işlemlerini günümüzde kullanılan,standartlaşan ve açık kaynaklı yöntemler ile yapılması tavsiye edilir.
+Oluşturulan şifreli veri içerisine `zaman-aşımı`,`oturum süresi` gibi veriler koyularak oturum durumunu yönetebilirsiniz.
+
+	JWT Token
+    JSON Web Token, istemci-sunucu taraflarının birbirleri arasındaki veri alışverişini ve bunun doğrulamasını sağlayan JSON tabanlı RFC 7519'de tanımlanmış açık bir standarttır.
+
+	JWT üç ana bölümden oluşur ve her bölüm "."(nokta) ile ayrılır;
+
+	Header
+		Oluşturulan Token ile ilgili şifreleme algoritmasını ve tipini tutar
+
+	Payload
+		İçine vereceğimiz her türlü veriyi tutar
+
+	Signature
+		Token ile ilgili doğrulama bilgisini tutar
+
+	BASE64({JSON_HEADER}).BASE64({JSON_PAYLOAD}).{ŞİFRELEME_YÖNTEMİ}(BASE64(JSON_HEADER) + "." + BASE64(JSON_PAYLOAD),{SECRE_KEY})
+
+	ejgdsfdslnkgSADfdskfslkfdsDFDs.edsaaDdsdFDsadıujhohufsDSAFTddsa.SflddsafjosdyfbjksdbfdsASDds
+	Header: Algoritma + Type        Payload: Data                    Signature: Verify Signature
+	
+	JWT sunucu tarafından kimlik bilgileri ile üretilip içerisine veri konularak istemci tarafına gönderilir.
+	İstemci JWT içerisinde ki veriyi okuyup işleyebilir ama SECRET olmaksızın işlemlerini yapar.
+
+	Stateless çalışır.İstemci ya da sunucu tarafında oturum ile bilgiler tutulmaz, istenilen her bilgi JWT içerisine konulmalıdır.
+	Portable çalışır. Encode ya da decode işlemi açık kaynaklı olduğu için her türlü platform üzerinden oluşturulup kullanılabilir.
+	Veriler JSON formatı ile tutulur.
+	Token'nın HEADER ve PAYLOAD alanları herhangi bir şifreleme işlemi uygulanmaz bu yüzden PAYLOAD alanına önemli veriler konulmamalıdır.
+	JWT üzerinden `zaman aşımı-sona erme zamanı` gibi bilgiler tutulduğu için oturum zamanı yönetimi sağlanabilir. 
+	Sunucu tarafından her hangi bilgi tutulmadığı için sunucu yükü azalır.
+
+
+Seneryolar
+    Günümüzde bir çok kimlik doğrulama yöntemi mevcuttur. Projenin ya da uygulamanın yapısına göre tercih edilebilir.
+
+İnternete Kapalı Projeler
+    Bu proje tipleri genellikle kurum içi projelerdir. Bu tip projeler BASIC Authentication yöntemini kullanabilinir.
+	Kullanımı ve entegrasyonu kolaydır.
+	Kurum içi olduğu için üçüncü kişiler tarafından erişilemeyeceği garanti altındadır.
+	Platform desteği yoksa bile kendimiz yazabiliriz.
+
+İnternete Açık Kullanıcı Bazlı Projeler
+    Bu projeler bir çok yöntem kullanılabilinir. Eğer proje katmanlı ve kırılımlı ise OAuth2 yöntemi kullanılabilinir.
+	Kullanımı ve entegrasyonu zordur.
+	Kırılımı çok olan projeler için ortak kimlik doğrulama sağlar
+	Oturum ve kullanıcı yönetimi kapsamlıdır.
+	Eğer tek katmanlı bir proje ise Bearer (Token) ya da Digest Authentication yöntemleri kullanıla bilinir.
+	Kullanımı ve entegrasyonu kolaydır.
+	Oturum ve kullanıcı yönetimi yeterlidir.
+	Tüm platformlar üzerine uygulanabilinir.
+
+İnternete Açık Kullanıcı Olmaksızın Projeler
+    Bu proje tipleri güvenlik ve kimlik doğrulamalarının en zor hali olan projelerdir çünkü bu proje genel kullanımı açık ve kullanıcı bazlı değillerdir o yüzden sunucu taraflı işlemlerin üçüncü taraf kişiler tarafından zarar verilmemesi için ek önlemler alınması gerekir.
+	Bu tip projeler HMAC ya da Bearer (Token) yöntemleri çokça tercih edilir.
+
+Daha fazlası: https://omansak.blogspot.com/2021/01/servislerde-guvenlik-web-servis-nedir.html

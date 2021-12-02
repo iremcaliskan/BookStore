@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApi.Application.UserOperations.Commands.CreateToken;
 using WebApi.Application.UserOperations.Commands.CreateUser;
+using WebApi.Application.UserOperations.Commands.RefreshToken;
 using WebApi.DbOperations;
 using WebApi.TokenOperations.Models;
 
@@ -41,10 +42,24 @@ namespace WebApi.Controllers
         [HttpPost("connect/token")]
         public ActionResult<Token> CreateToken([FromBody] CreateTokenModel login)
         {
-            CreateTokenCommand command = new(_context, _mapper, _configuration);
+            CreateTokenCommand command = new(_context, _configuration);
             command.Model = login;
 
             CreateTokenCommandValidator validator = new();
+            validator.ValidateAndThrow(command);
+
+            var token = command.Handle();
+
+            return token;
+        }
+
+        [HttpPost("refreshToken")]
+        public ActionResult<Token> RefreshToken([FromQuery] string refreshToken)
+        {
+            RefreshTokenCommand command = new(_context, _configuration);
+            command.RefreshToken = refreshToken;
+
+            RefreshTokenCommandValidator validator = new();
             validator.ValidateAndThrow(command);
 
             var token = command.Handle();

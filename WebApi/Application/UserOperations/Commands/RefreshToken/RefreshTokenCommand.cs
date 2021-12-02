@@ -2,19 +2,19 @@
 using System;
 using System.Linq;
 using WebApi.DbOperations;
+using WebApi.TokenOperations;
 using WebApi.TokenOperations.Models;
-using TokenHandler = WebApi.TokenOperations.TokenHandler;
 
-namespace WebApi.Application.UserOperations.Commands.CreateToken
+namespace WebApi.Application.UserOperations.Commands.RefreshToken
 {
-    public class CreateTokenCommand
+    public class RefreshTokenCommand
     {
-        public CreateTokenModel Model { get; set; }
+        public string RefreshToken { get; set; }
 
         private readonly IBookStoreDbContext _context;
         private readonly IConfiguration _configuration;
 
-        public CreateTokenCommand(IBookStoreDbContext context, IConfiguration configuration)
+        public RefreshTokenCommand(IBookStoreDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
@@ -22,28 +22,21 @@ namespace WebApi.Application.UserOperations.Commands.CreateToken
 
         public Token Handle()
         {
-            var user = _context.Users.FirstOrDefault(x => x.Email == Model.Email && x.Password == Model.Password);
+            var user = _context.Users.FirstOrDefault(x => x.RefreshToken == RefreshToken && x.RefreshTokenExpireDate > DateTime.Now);
             if (user is null)
             {
-                throw new InvalidOperationException("Email or Password is wrong!");
+                throw new InvalidOperationException("Refresh token is not valid!");
             }
 
-            // Create token
             TokenHandler handler = new(_configuration);
             var token = handler.CreateAccessToken(user);
 
+            // Uzun soluklu kullanici islemlerinin suresi bitmeden yapilmasini saglar, surekli token'i yeniler
             user.RefreshToken = token.RefreshToken;
             user.RefreshTokenExpireDate = token.Expiration.AddMinutes(5);
-
             _context.SaveChanges();
 
             return token;
         }
-    }
-
-    public class CreateTokenModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
     }
 }
